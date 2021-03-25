@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import useSWR from "swr";
 import {useRouter} from "next/router";
@@ -18,7 +18,7 @@ export default function Update() {
   const [isPriority, setIsPriority] = useState("");
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
- 
+
   function Update(e) {
     e.preventDefault();
     const checkPriority = !isPriority ? data.priority : isPriority
@@ -109,6 +109,10 @@ export default function Update() {
               <span>Current Status: </span>
               <span>{data.status}</span>
             </p>
+            {data.allocated && <p>
+              <span>Allocated To: </span>
+              <span>{data.allocated}</span>
+            </p>}
           </div>
           {data.updates.comments && (
             <div className="grid md:grid-cols-3 md:gap-2 mb-4 shadow sm:rounded-md p-4">
@@ -157,7 +161,6 @@ export default function Update() {
                     </div>
                     {(isStatus === "Allocated" || data.status === "Allocated") &&
                     <div className="col-span-6 sm:col-span-3">
-                    {/* <div className={`col-span-6 sm:col-span-3 ${isStatus !== "Allocated" || data.status !== "Allocated" ? "hidden" : ""}`}></div> */}
                     <label
                         htmlFor="allocated"
                         className="block text-sm font-medium text-gray-700"
@@ -169,9 +172,10 @@ export default function Update() {
                         id="allocated"
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         onChange={(e) => setIsAllocated(e.target.value)}
-                        // defaultValue="Further Action"
+                        defaultValue=""
                         required
                       >
+                      <option disabled value=""> -- allocate to -- </option>
                       {members.filter(team => team.team === data.team).map((name, index) => {
                           return (
                               <option key={index} value={name.name}>{name.name} - {name.team}</option>

@@ -17,24 +17,7 @@ export default function Dashboard() {
   const green = "bg-green-500";
   const breached = "bg-black";
   
-  function compareObjects(object1, object2, key) {
-    const obj1 = object1[key].toUpperCase()
-    const obj2 = object2[key].toUpperCase()
-  
-    if (obj1 < obj2) {
-      return -1
-    }
-    if (obj1 > obj2) {
-      return 1
-    }
-    return 0
-  }
-
-  const test = data.Items.sort((x, y) => x.dueBy - y.dueBy)
-
-  console.log(test);
-
-  return (
+   return (
     <main>
       <div className="grid-cols-2 grid w-5/6 m-auto">
         <div className="shadow rounded-lg w-40 text-center h-28 m-auto mt-12 p-4">
