@@ -54,6 +54,7 @@ export default function Teams() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {members.map((member, index) => {
+                    const count = data.Items.filter(count => count.allocated === member.name).length
                     return (
                       <tr key={index}>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -92,14 +93,14 @@ export default function Teams() {
                           {member.team}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {data.Items.filter(count => count.allocated === member.name).length}
+                          {count}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <Link href={`/allocated?name=${member.name}`}>
+                          {count !== 0 && <Link href={`/allocated?name=${member.name}`}>
                             <a className="text-indigo-600 hover:text-indigo-900">
                               Allocated
                             </a>
-                          </Link>
+                          </Link>}
                         </td>
                       </tr>
                     );
