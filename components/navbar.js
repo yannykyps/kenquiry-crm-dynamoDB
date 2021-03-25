@@ -104,7 +104,7 @@ export default function Navbar() {
                     Teams
                   </a>
                 </Link>
-                <Link href="/">
+                {/* <Link href="/">
                   <a
                     className={`${
                       router.pathname === "/projects" ? active : unactive
@@ -112,7 +112,7 @@ export default function Navbar() {
                   >
                     Projects
                   </a>
-                </Link>
+                </Link> */}
                 <Link href="/reports">
                   <a
                     className={`${
@@ -256,13 +256,13 @@ export default function Navbar() {
               Teams
             </a>
           </Link>
-          <Link href="/">
+          {/* <Link href="/">
             <a className={`${
                       router.pathname === "/projects" ? active : unactive
                     } block px-3 py-2 rounded-md text-base font-medium`}>
               Projects
             </a>
-          </Link>
+          </Link> */}
           <Link href="/reports">
             <a className={`${
                       router.pathname === "/reports" ? active : unactive

@@ -93,7 +93,7 @@ export default function Allocated() {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          {data.Items.map((item) => {
+                          {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).map((item) => {
                             const d = parseInt(item.dueBy);
                             const timeLeft = d - Date.now();
                             const timerMin = Math.round(

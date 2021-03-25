@@ -17,6 +17,22 @@ export default function Dashboard() {
   const green = "bg-green-500";
   const breached = "bg-black";
   
+  function compareObjects(object1, object2, key) {
+    const obj1 = object1[key].toUpperCase()
+    const obj2 = object2[key].toUpperCase()
+  
+    if (obj1 < obj2) {
+      return -1
+    }
+    if (obj1 > obj2) {
+      return 1
+    }
+    return 0
+  }
+
+  const test = data.Items.sort((x, y) => x.dueBy - y.dueBy)
+
+  console.log(test);
 
   return (
     <main>
@@ -91,7 +107,7 @@ export default function Dashboard() {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {data.Items.map((item) => {
+                        {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).map((item) => {
                           const d = parseInt(item.dueBy);
                           const timeLeft = d - Date.now();
                           const timerMin = Math.round(

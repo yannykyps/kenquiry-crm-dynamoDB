@@ -12,8 +12,8 @@ export default function Report() {
   const {data, error} = useSWR(`/api/report`, fetcher);
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
-  const breach = data.Items.filter((item) => item.dueBy < Date.now());
-  const sla = data.Items.filter((item) => item.dueBy > Date.now());
+  const breach = data.Items.filter((item) => item.dueBy < item.updates.updatedDate);
+  const sla = data.Items.filter((item) => item.dueBy > item.updates.updatedDate);
   const red = "bg-red-500";
   const amber = "bg-yellow-500";
   const green = "bg-green-500";
@@ -21,9 +21,8 @@ export default function Report() {
 
   return (
     <>
-
       <main>
-        <div className="grid-cols-3 grid w-5/6 m-auto">
+        <div className="sm:grid-cols-4 grid w-5/6 m-auto">
           <div className="shadow rounded-lg w-40 text-center h-28 m-auto mt-12 p-4">
             <h2 className="font-medium text-gray-500">Total Complete</h2>
             <h1 className="font-medium text-black text-5xl">{data.Count}</h1>
@@ -35,6 +34,10 @@ export default function Report() {
           <div className="shadow rounded-lg w-40 text-center h-28 m-auto mt-12 p-4">
             <h2 className="font-medium text-gray-500">SLA Not Met</h2>
             <h1 className="font-medium text-black text-5xl">{breach.length}</h1>
+          </div>
+          <div className="shadow rounded-lg w-40 text-center h-28 m-auto mt-12 p-4">
+            <h2 className="font-medium text-gray-500">% SLA</h2>
+            <h1 className="font-medium text-black text-5xl">{Math.round((sla.length/data.Count)*100)}%</h1>
           </div>
         </div>
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -98,9 +101,9 @@ export default function Report() {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          {data.Items.map((item) => {
+                          {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).map((item) => {
                             const d = parseInt(item.dueBy);
-                            const timeLeft = d - Date.now();
+                            const timeLeft = d - item.updates.updatedDate;
                             const timerMin = Math.round(
                               moment.duration(timeLeft).asMinutes()
                             );
