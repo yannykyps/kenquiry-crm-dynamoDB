@@ -9,12 +9,12 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Update() {
   const router = useRouter();
+  const {id, dueBy} = router.query;
+  const {data, error} = useSWR(`/api/request?id=${id}&dueBy=${dueBy}`, fetcher);
   const [updateRequest, setUpdateRequest] = useState("");
   const [isStatus, setIsStatus] = useState("Further Action");
   const [isAllocated, setIsAllocated] = useState("");
-  const {id, dueBy} = router.query;
   const updatedBy = "Jo Bloggs";
-  const {data, error} = useSWR(`/api/request?id=${id}&dueBy=${dueBy}`, fetcher);
   const [isPriority, setIsPriority] = useState("");
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
@@ -151,15 +151,16 @@ export default function Update() {
                         id="status"
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         onChange={(e) => setIsStatus(e.target.value)}
-                        defaultValue={data.status === "New" ? "Further Action" : data.status}
+                        defaultValue=""
                         required
                       >
+                      <option disabled value=""> -- select status -- </option>
                         <option value="Further Action">Further Action</option>
                         <option value="Allocated">Allocated</option>
                         <option value="Complete">Complete</option>
                       </select>
                     </div>
-                    {(isStatus === "Allocated" || data.status === "Allocated") &&
+                    {isStatus === "Allocated" &&
                     <div className="col-span-6 sm:col-span-3">
                     <label
                         htmlFor="allocated"
