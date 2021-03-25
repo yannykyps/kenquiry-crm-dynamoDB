@@ -1,5 +1,7 @@
 # Kenquiry Customer Relationship Managerment Systems
 
+## Currently in development
+
 ## Stack
 
 - React
