@@ -5,16 +5,32 @@
     "kenquiry-aws": "bin/kenquiry-aws.js"
   },
   "scripts": {
-    "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
+    "build": "next build",
+    "start": "next start",
     "cdk": "cdk",
-    "test": "jest"
+    "test": "jest",
+    "dev": "next"
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.94.1",
+    "autoprefixer": "^10.2.5",
     "aws-cdk": "1.94.1",
-    "jest": "^26.4.2"
+    "jest": "^26.4.2",
+    "postcss": "^8.2.8",
+    "tailwindcss": "^2.0.4"
   },
   "dependencies": {
-    "@aws-cdk/core": "1.94.1"
+    "@aws-cdk/aws-dynamodb": "^1.94.1",
+    "@aws-cdk/core": "1.94.1",
+    "@headlessui/react": "^0.3.1",
+    "@tailwindcss/forms": "^0.2.1",
+    "aws-sdk": "^2.868.0",
+    "axios": "^0.21.1",
+    "moment": "^2.29.1",
+    "nanoid": "^3.1.22",
+    "next": "^10.0.9",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "swr": "^0.5.4"
   }
 }
