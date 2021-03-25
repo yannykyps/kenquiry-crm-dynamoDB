@@ -14,17 +14,12 @@ export default function Update() {
   const [updateRequest, setUpdateRequest] = useState("");
   const [isStatus, setIsStatus] = useState("");
   const [isAllocated, setIsAllocated] = useState("");
-  const updatedBy = "Jo Bloggs";
   const [isPriority, setIsPriority] = useState("");
+  const updatedBy = "Jo Bloggs";
+  
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
-
-  useEffect(() => {
-    if (data) {
-      setIsPriority(data.priority);
-    }
-  }, [data]);
-
+  
   function Update(e) {
     e.preventDefault();
     axios
@@ -213,9 +208,10 @@ export default function Update() {
                         id="priority"
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         onChange={(e) => setIsPriority(e.target.value)}
-                        value={isPriority}
+                        defaultValue={isPriority}
                         required
                       >
+                      <option disabled value=""> -- set priority -- </option>
                         <option value="P1">P1</option>
                         <option value="P2">P2</option>
                         <option value="P3">P3</option>

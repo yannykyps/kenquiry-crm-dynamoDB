@@ -4,11 +4,8 @@ import {useRouter} from "next/router";
 import {nanoid} from "nanoid";
 
 export default function Request() {
-  const [newRequest, setNewRequest] = useState({});
+  const [newRequest, setNewRequest] = useState({team: "IT", jobType: "Incident", response: 24});
   const router = useRouter();
-  const [isResponse, setIsResponse] = useState(24);
-  const [isTeam, setIsTeam] = useState("IT");
-  const [isJobType, setIsJobType] = useState("Incident");
   const uid = "KEN" + nanoid(10);
 
   async function Add(e) {
@@ -21,17 +18,17 @@ export default function Request() {
         tel: newRequest.tel,
         dept: newRequest.dept,
         address: newRequest.address,
-        team: isTeam,
+        team: newRequest.team,
         status: "New",
-        response: isResponse,
-        jobType: isJobType,
+        response: newRequest.response,
+        jobType: newRequest.jobType,
         job: newRequest.job,
         priority:
-          isResponse === 1
+        newRequest.response === "1"
             ? "P1"
-            : isResponse === 4
+            : newRequest.response === "4"
             ? "P2"
-            : isResponse === 24
+            : newRequest.response === "24"
             ? "P3"
             : "P4",
       });
@@ -42,6 +39,7 @@ export default function Request() {
       console.log(error);
     }
   }
+
 
   function handleNewTask(e) {
     const {value, name} = e.target;
@@ -180,8 +178,8 @@ export default function Request() {
                         name="team"
                         id="team"
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        onChange={(e) => setIsTeam(e.target.value)}
-                        defaultValue="IT"
+                        onChange={handleNewTask}
+                        value={newRequest.team}
                         required
                       >
                         <option value="Estates">Estates</option>
@@ -202,8 +200,8 @@ export default function Request() {
                         name="jobType"
                         id="jobType"
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        onChange={(e) => setIsJobType(e.target.value)}
-                        defaultValue="IT"
+                        onChange={handleNewTask}
+                        value={newRequest.jobType}
                         required
                       >
                         <option value="Incident">Incident</option>
@@ -224,8 +222,8 @@ export default function Request() {
                         name="response"
                         id="response"
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        onChange={(e) => setIsResponse(e.target.value)}
-                        defaultValue={24}
+                        onChange={handleNewTask}
+                        value={newRequest.response}
                         required
                       >
                         <option value={1}>P1 - 1 hour</option>
