@@ -8,6 +8,7 @@
 - Node
 - Next
 - DynamoDB
+- TailwindCSS
 
 ## Useful commands
 
