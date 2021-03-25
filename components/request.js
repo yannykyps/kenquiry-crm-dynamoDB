@@ -43,8 +43,8 @@ export default function Request() {
     }
   }
 
-  function handleNewTask(event) {
-    const {value, name} = event.target;
+  function handleNewTask(e) {
+    const {value, name} = e.target;
     setNewRequest((prevValue) => ({
       ...prevValue,
       [name]: value,
