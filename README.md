@@ -2,6 +2,8 @@
 
 ## Currently in development
 
+- Demo: [Kenquiry CRM](https://kenquiry-crm-dynamo-db.vercel.app/)
+
 ## Stack
 
 - React
