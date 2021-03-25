@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 import useSWR from "swr";
 import {useRouter} from "next/router";
 import moment from "moment";
-import members from "./teamMembers"
+import members from "./teamMembers";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -12,26 +12,31 @@ export default function Update() {
   const {id, dueBy} = router.query;
   const {data, error} = useSWR(`/api/request?id=${id}&dueBy=${dueBy}`, fetcher);
   const [updateRequest, setUpdateRequest] = useState("");
-  const [isStatus, setIsStatus] = useState("Further Action");
+  const [isStatus, setIsStatus] = useState("");
   const [isAllocated, setIsAllocated] = useState("");
   const updatedBy = "Jo Bloggs";
   const [isPriority, setIsPriority] = useState("");
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
 
+  useEffect(() => {
+    if (data) {
+      setIsPriority(data.priority);
+    }
+  }, [data]);
+
   function Update(e) {
     e.preventDefault();
-    const checkPriority = !isPriority ? data.priority : isPriority
     axios
       .post("/api/request", {
         id: data.id,
         dueBy: data.dueBy,
         comments: updateRequest,
         status: isStatus,
-        priority: checkPriority,
+        priority: isPriority,
         updatedBy: updatedBy,
         updatedDate: Date.now(),
-        allocated: isAllocated
+        allocated: isAllocated,
       })
       .then(function (response) {
         console.log(response);
@@ -44,7 +49,6 @@ export default function Update() {
   }
 
   return (
-    
     <div className="p-8 bg-gray-100">
       <div>
         <div className="md:col-span-1">
@@ -109,10 +113,12 @@ export default function Update() {
               <span>Current Status: </span>
               <span>{data.status}</span>
             </p>
-            {data.allocated && <p>
-              <span>Allocated To: </span>
-              <span>{data.allocated}</span>
-            </p>}
+            {data.allocated && (
+              <p>
+                <span>Allocated To: </span>
+                <span>{data.allocated}</span>
+              </p>
+            )}
           </div>
           {data.updates.comments && (
             <div className="grid md:grid-cols-3 md:gap-2 mb-4 shadow sm:rounded-md p-4">
@@ -151,39 +157,50 @@ export default function Update() {
                         id="status"
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         onChange={(e) => setIsStatus(e.target.value)}
-                        defaultValue=""
+                        value={isStatus}
                         required
                       >
-                      <option disabled value=""> -- select status -- </option>
+                        <option disabled value="">
+                          {" "}
+                          -- select status --{" "}
+                        </option>
                         <option value="Further Action">Further Action</option>
                         <option value="Allocated">Allocated</option>
                         <option value="Complete">Complete</option>
                       </select>
                     </div>
-                    {isStatus === "Allocated" &&
-                    <div className="col-span-6 sm:col-span-3">
-                    <label
-                        htmlFor="allocated"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Allocated To
-                      </label>
-                      <select
-                        name="allocated"
-                        id="allocated"
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        onChange={(e) => setIsAllocated(e.target.value)}
-                        defaultValue=""
-                        required
-                      >
-                      <option disabled value=""> -- allocate to -- </option>
-                      {members.filter(team => team.team === data.team).map((name, index) => {
-                          return (
-                              <option key={index} value={name.name}>{name.name} - {name.team}</option>
-                          )
-                      })}
-                      </select>
-                    </div>}
+                    {isStatus === "Allocated" && (
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          htmlFor="allocated"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Allocated To
+                        </label>
+                        <select
+                          name="allocated"
+                          id="allocated"
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          onChange={(e) => setIsAllocated(e.target.value)}
+                          value={isAllocated}
+                          required
+                        >
+                          <option disabled value="">
+                            {" "}
+                            -- allocate to --{" "}
+                          </option>
+                          {members
+                            .filter((team) => team.team === data.team)
+                            .map((name, index) => {
+                              return (
+                                <option key={index} value={name.name}>
+                                  {name.name} - {name.team}
+                                </option>
+                              );
+                            })}
+                        </select>
+                      </div>
+                    )}
                     <div className="col-span-6 sm:col-span-3 sm:row-start-2">
                       <label
                         htmlFor="priority"
@@ -196,7 +213,7 @@ export default function Update() {
                         id="priority"
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         onChange={(e) => setIsPriority(e.target.value)}
-                        defaultValue={data.priority}
+                        value={isPriority}
                         required
                       >
                         <option value="P1">P1</option>
