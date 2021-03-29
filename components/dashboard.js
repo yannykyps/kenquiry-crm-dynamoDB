@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useRef} from "react";
 import useSWR from "swr";
 import moment from "moment";
 import Link from "next/link";
@@ -7,7 +7,8 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Dashboard() {
   const {data, error} = useSWR("/api/request", fetcher);
-
+  const [expand, setExpand] = useState("");
+  
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
 
@@ -16,8 +17,20 @@ export default function Dashboard() {
   const amber = "bg-yellow-500";
   const green = "bg-green-500";
   const breached = "bg-black";
+
   
-   return (
+  function OnExpand(e) {
+    const value = e.currentTarget.getAttribute("value")
+    if (value !== expand) {
+      setExpand(value);
+    } else {
+      setExpand("");
+    }
+    
+  }
+
+
+  return (
     <main>
       <div className="grid-cols-2 grid w-5/6 m-auto">
         <div className="shadow rounded-lg w-40 text-center h-28 m-auto mt-12 p-4">
@@ -89,8 +102,10 @@ export default function Dashboard() {
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).map((item) => {
+                      
+                        {data.Items.sort(
+                          (dateX, dateY) => dateX.dueBy - dateY.dueBy
+                        ).map((item) => {
                           const d = parseInt(item.dueBy);
                           const timeLeft = d - Date.now();
                           const timerMin = Math.round(
@@ -100,50 +115,79 @@ export default function Dashboard() {
                             moment.duration(timeLeft).asHours()
                           );
                           return (
-                            <Link
-                              href={`/update?id=${item.id}&dueBy=${item.dueBy}`}
-                              key={item.id}
-                            >
-                              <tr className="hover:bg-gray-200 cursor-pointer">
+                            <tbody key={item.id} className="bg-white divide-y divide-gray-200">
+                              <tr
+                                className="cursor-pointer hover:bg-gray-200"
+                                value={item.id}
+                                onClick={OnExpand}
+                              >
+                                <Link
+                                  href={`/update?id=${item.id}&dueBy=${item.dueBy}`}
+                                >
+                                  <td className="p-2 whitespace-nowrap">
+                                    <div className="pl-4 text-sm font-medium text-blue-800 hover:text-blue-500">
+                                      {item.id}
+                                    </div>
+                                  </td>
+                                </Link>
                                 <td className="p-2 whitespace-nowrap">
-                                  <div className="pl-4 text-sm font-medium text-gray-900">
-                                    {item.id}
-                                  </div>
-                                </td>
-                                <td className="p-2 whitespace-nowrap">
-                                  <div className="pl-4 text-sm text-gray-900">
+                                  <div
+                                    value={item.id}
+                                    className="pl-4 text-sm text-gray-900"
+                                  >
                                     {moment(item.entryDate).format(
                                       "DD/MM/YY, HH:mm"
                                     )}
                                   </div>
                                 </td>
                                 <td className="p-2 whitespace-nowrap">
-                                  <div className="pl-4 text-sm text-gray-900">
+                                  <div
+                                    value={item.id}
+                                    className="pl-4 text-sm text-gray-900"
+                                  >
                                     {item.fullName}
                                   </div>
                                 </td>
                                 <td className="p-2 whitespace-nowrap">
-                                  <div className="pl-4 text-sm text-gray-900">
+                                  <div
+                                    value={item.id}
+                                    className="pl-4 text-sm text-gray-900"
+                                  >
                                     {item.team}
                                   </div>
                                 </td>
                                 <td className="p-2 whitespace-nowrap">
-                                  <div className="pl-4 text-sm text-gray-900">
+                                  <div
+                                    value={item.id}
+                                    className="pl-4 text-sm text-gray-900"
+                                  >
                                     {item.response} hr/s
                                   </div>
                                 </td>
                                 <td className="px-6 py-2 whitespace-nowrap">
-                                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.status === "New" ?"bg-green-100 text-green-800" : item.status === "Allocated" ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800"}`}>
+                                  <span
+                                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                      item.status === "New"
+                                        ? "bg-green-100 text-green-800"
+                                        : item.status === "Allocated"
+                                        ? "bg-yellow-100 text-yellow-800"
+                                        : "bg-red-100 text-red-800"
+                                    }`}
+                                  >
                                     {item.status}
                                   </span>
                                 </td>
                                 <td className="p-2 whitespace-nowrap">
-                                  <div className="pl-4 text-sm text-gray-900">
+                                  <div
+                                    value={item.id}
+                                    className="pl-4 text-sm text-gray-900"
+                                  >
                                     {moment(d).format("DD/MM/YY, HH:mm")}
                                   </div>
                                 </td>
                                 <td className="px-6 py-2 whitespace-nowrap">
                                   <div
+                                    value={item.id}
                                     className={`${
                                       timerMin < 0
                                         ? breached
@@ -159,11 +203,22 @@ export default function Dashboard() {
                                       : timerMin + " mins"}
                                   </div>
                                 </td>
+                                
                               </tr>
-                            </Link>
+                                <tr>
+                                <td
+                                    colSpan="8"
+                                    className={`p-2 whitespace-nowrap ${item.id !== expand && "hidden"}`}
+                                  >
+                                    <div className="pl-4 text-sm text-gray-900">
+                                      Job Description: {item.job}
+                                    </div>
+                                  </td>
+                                </tr>
+                                </tbody>
                           );
                         })}
-                      </tbody>
+                      
                     </table>
                   </div>
                 </div>

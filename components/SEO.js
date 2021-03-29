@@ -1,5 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
+import PropTypes from "prop-types";
 
 export const siteTitle = 'Kenquiry'
 
@@ -18,4 +19,12 @@ const SEO = ({title, description}) => {
     )
 }
 
+
+
 export default SEO
+
+SEO.propTypes = {
+  description: PropTypes.any,
+  title: PropTypes.any.isRequired
+}
+

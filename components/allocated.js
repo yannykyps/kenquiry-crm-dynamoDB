@@ -19,8 +19,6 @@ export default function Allocated() {
   const breached = "bg-black";
 
   return (
-    <>
-
       <main>
         <div className="grid-cols-2 grid w-5/6 m-auto">
           <div className="shadow rounded-lg w-40 text-center h-28 m-auto mt-12 p-4">
@@ -182,6 +180,5 @@ export default function Allocated() {
           </div>
         </div>
       </main>
-    </>
   );
 }
