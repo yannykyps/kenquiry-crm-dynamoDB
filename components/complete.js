@@ -1,102 +1,91 @@
+import PropTypes from "prop-types";
 import React from "react";
-import useSWR from "swr";
-import {useRouter} from "next/router";
 import moment from "moment";
+import {
+  Container,
+  Header,
+  InfoContainer,
+  InfoField,
+} from "./form";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
-
-export default function Complete() {
-  const router = useRouter();
-  const {id, dueBy} = router.query;
-  const {data, error} = useSWR(`/api/report?id=${id}&dueBy=${dueBy}`, fetcher);
- 
-  if (error) return <div>Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
+export default function Complete(props) {
 
   return (
-    <div className="p-8 bg-gray-100">
-      <div>
-        <div className="md:col-span-1">
-          <div className="px-4 sm:px-0 pb-4">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
-              Details
-            </h3>
-            <p className="mt-1 text-sm text-gray-600">Update Request</p>
-          </div>
-          <div className="grid md:grid-cols-3 md:gap-2 mb-4 shadow sm:rounded-md p-4">
-            <p>
-              <span>Full Name: </span>
-              <span>{data.fullName}</span>
-            </p>
-            <p>
-              <span>Entry Date: </span>
-              <span>{moment(data.entryDate).format("DD/MM/YY, HH:mm")}</span>
-            </p>
-            <p>
-              <span>Due By Date: </span>
-              <span>
-                {moment(parseInt(data.dueBy)).format("DD/MM/YY, HH:mm")}
-              </span>
-            </p>
-            <p>
-              <span>Email Addrerss: </span>
-              <span>{data.email}</span>
-            </p>
-            <p>
-              <span>Telephone: </span>
-              <span>{data.telephone}</span>
-            </p>
-            <p>
-              <span>Department: </span>
-              <span>{data.department}</span>
-            </p>
-            <p className="sm:col-span-3">
-              <span>Address: </span>
-              <span>{data.address}</span>
-            </p>
-            <p className="sm:col-span-3">
-              <span>Job Description: </span>
-              <span>{data.job}</span>
-            </p>
-            <p>
-              <span>Team: </span>
-              <span>{data.team}</span>
-            </p>
-            <p>
-              <span>Job Type: </span>
-              <span>{data.jobType}</span>
-            </p>
-            <p>
-              <span>Response Time: </span>
-              <span>{data.response} hour/s</span>
-            </p>
-            <p>
-              <span>Priority: </span>
-              <span>{data.priority}</span>
-            </p>
-            <p>
-              <span>Current Status: </span>
-              <span>{data.status}</span>
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 md:gap-2 mb-4 shadow sm:rounded-md p-4">
-            <p className="sm:col-span-3">
-              <span>Completed Update: </span>
-              <span>{data.updates.comments}</span>
-            </p>
-            <p className="sm:col-span-3">
-              <span>Updated By: </span>
-              <span>{data.updates.updatedBy}</span>
-            </p>
-            <p className="sm:col-span-3">
-              <span>Updated Date: </span>
-              <span>
-                {moment(data.updates.updatedDate).format("DD/MM/YY, HH:mm")}
-              </span>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container>
+      <Header title="Details" subTitle="Completed Request" />
+      <InfoContainer>
+        <InfoField label="Full Name: " value={props.fullName} gridSpan={0} />
+        <InfoField
+          label="Entry Date: "
+          value={moment(props.entryDate).format("DD/MM/YY, HH:mm")}
+          gridSpan={0}
+        />
+        <InfoField
+          label="Due By Date: "
+          value={moment(parseInt(props.dueBy)).format("DD/MM/YY, HH:mm")}
+          gridSpan={0}
+        />
+        <InfoField label="Email Address: " value={props.email} gridSpan={0} />
+        <InfoField label="Telephone: " value={props.telephone} gridSpan={0} />
+        <InfoField label="Department: " value={props.department} gridSpan={0} />
+        <InfoField label="Address: " value={props.address} gridSpan={3} />
+        <InfoField label="Job Description: " value={props.job} gridSpan={3} />
+        <InfoField label="Team: " value={props.team} gridSpan={0} />
+        <InfoField label="Job Type: " value={props.jobType} gridSpan={0} />
+        <InfoField
+          label="Response Time: "
+          value={`${props.response} hour/s`}
+          gridSpan={0}
+        />
+        <InfoField label="Priority: " value={props.priority} gridSpan={0} />
+        <InfoField label="Current Status: " value={props.status} gridSpan={0} />
+        {props.allocated && (
+          <InfoField
+            label="Allocated To: "
+            value={props.allocated}
+            gridSpan={0}
+          />
+        )}
+      </InfoContainer>
+      {props.comments && (
+        <InfoContainer>
+          <InfoField
+            label="Previous Update: "
+            value={props.comments}
+            gridSpan={3}
+          />
+          <InfoField
+            label="Updated By: "
+            value={props.updatedBy}
+            gridSpan={3}
+          />
+          <InfoField
+            label="Updated Date: "
+            value={moment(props.updatedDate).format("DD/MM/YY, HH:mm")}
+            gridSpan={3}
+          />
+        </InfoContainer>
+      )}
+    </Container>
   );
+}
+
+Complete.propTypes = {
+  address: PropTypes.any,
+  allocated: PropTypes.any,
+  comments: PropTypes.any,
+  department: PropTypes.any,
+  dueBy: PropTypes.any,
+  email: PropTypes.any,
+  entryDate: PropTypes.any,
+  fullName: PropTypes.any,
+  job: PropTypes.any,
+  jobType: PropTypes.any,
+  priority: PropTypes.any,
+  response: PropTypes.any,
+  status: PropTypes.any,
+  team: PropTypes.any,
+  telephone: PropTypes.any,
+  updatedBy: PropTypes.any,
+  updatedDate: PropTypes.any,
 }

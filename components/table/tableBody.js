@@ -28,22 +28,22 @@ export default function TableBody(props) {
           </td>
         </Link>
         <td className="p-2 whitespace-nowrap">
-          <div value={props.id} className="pl-4 text-sm text-gray-900">
+          <div className="pl-4 text-sm text-gray-900">
             {moment(props.entryDate).format("DD/MM/YY, HH:mm")}
           </div>
         </td>
         <td className="p-2 whitespace-nowrap">
-          <div value={props.id} className="pl-4 text-sm text-gray-900">
+          <div className="pl-4 text-sm text-gray-900">
             {props.fullName}
           </div>
         </td>
         <td className="p-2 whitespace-nowrap">
-          <div value={props.id} className="pl-4 text-sm text-gray-900">
+          <div className="pl-4 text-sm text-gray-900">
             {props.team}
           </div>
         </td>
         <td className="p-2 whitespace-nowrap">
-          <div value={props.id} className="pl-4 text-sm text-gray-900">
+          <div className="pl-4 text-sm text-gray-900">
             {props.response} hr/s
           </div>
         </td>
@@ -61,13 +61,12 @@ export default function TableBody(props) {
           </span>
         </td>
         <td className="p-2 whitespace-nowrap">
-          <div value={props.id} className="pl-4 text-sm text-gray-900">
+          <div className="pl-4 text-sm text-gray-900">
             {moment(d).format("DD/MM/YY, HH:mm")}
           </div>
         </td>
         <td className="px-6 py-2 whitespace-nowrap">
           <div
-            value={props.id}
             className={`${
               timerMin < 0
                 ? breached

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
-import useSWR, {mutate} from "swr";
+import useSWR from "swr";
 import {useRouter} from "next/router";
 import moment from "moment";
 import members from "./teamMembers";
