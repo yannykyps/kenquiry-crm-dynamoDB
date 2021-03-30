@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import TableHead from "./table/tableHead";
-import TableLayout from "./table/tableLayout";
+import {TableHead, TableLayout} from "./table"
 
 
 export default function Dashboard(props) {
