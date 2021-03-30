@@ -35,9 +35,10 @@ export default function Home() {
         title="Dashboard"
         subTitle="Dashboard used to monitor all active requests for your team"
       />
-      <DashStatsGrid grid={2}>
+      <DashStatsGrid grid={3}>
       <DashStats total={data.Count} title="Total Requests"/>
       <DashStats total={breach.length} title="Total Breached"/>
+      <DashStats total={`${Math.round((breach.length/data.Count)*100)}%`} title="% Breached"/>
       </DashStatsGrid>
       <Dashboard>
         {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).map(
