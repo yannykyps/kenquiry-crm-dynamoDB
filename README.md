@@ -1,4 +1,4 @@
-# Kenquiry Customer Relationship Managerment Systems
+# Kenquiry Customer Relationship Management Systems
 
 ## Currently in development
 
