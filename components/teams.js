@@ -1,6 +1,7 @@
 import Link from "next/link";
 import members from "./teamMembers";
 import useSWR from "swr";
+import TableHead from "./table/tableHead";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -17,36 +18,11 @@ export default function Teams() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Title
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Status
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Team
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Workload
-                    </th>
+                    <TableHead head="Name" />
+                    <TableHead head="Title" />
+                    <TableHead head="Status" />
+                    <TableHead head="Team" />
+                    <TableHead head="Workload" />
                     <th scope="col" className="relative px-6 py-3">
                       <span className="sr-only">Edit</span>
                     </th>

@@ -7,7 +7,7 @@ export default function Navbar() {
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const router = useRouter();
-  const unactive = "text-gray-300 hover:bg-gray-700 hover:text-white";
+  const inactive = "text-gray-300 hover:bg-gray-700 hover:text-white";
   const active = "bg-gray-900 text-white";
 
   return (
@@ -89,7 +89,7 @@ export default function Navbar() {
                 <Link href="/">
                   <a
                     className={`${
-                      router.pathname === "/" ? active : unactive
+                      router.pathname === "/" ? active : inactive
                     } px-3 py-2 rounded-md text-sm font-medium`}
                   >
                     Dashboard
@@ -98,25 +98,16 @@ export default function Navbar() {
                 <Link href="/teams">
                   <a
                     className={`${
-                      router.pathname === "/teams" ? active : unactive
+                      router.pathname === "/teams" ? active : inactive
                     } px-3 py-2 rounded-md text-sm font-medium`}
                   >
                     Teams
                   </a>
                 </Link>
-                {/* <Link href="/">
-                  <a
-                    className={`${
-                      router.pathname === "/projects" ? active : unactive
-                    } px-3 py-2 rounded-md text-sm font-medium`}
-                  >
-                    Projects
-                  </a>
-                </Link> */}
                 <Link href="/reports">
                   <a
                     className={`${
-                      router.pathname === "/reports" ? active : unactive
+                      router.pathname === "/reports" ? active : inactive
                     } px-3 py-2 rounded-md text-sm font-medium`}
                   >
                     Reports
@@ -241,31 +232,23 @@ export default function Navbar() {
         id="mobile-menu"
       >
         <div className="px-2 pt-2 pb-3 space-y-1">
-          {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
           <Link href="/">
             <a className={`${
-                      router.pathname === "/" ? active : unactive
+                      router.pathname === "/" ? active : inactive
                     } block px-3 py-2 rounded-md text-base font-medium`}>
               Dashboard
             </a>
           </Link>
           <Link href="/teams">
             <a className={`${
-                      router.pathname === "/teams" ? active : unactive
+                      router.pathname === "/teams" ? active : inactive
                     } block px-3 py-2 rounded-md text-base font-medium`}>
               Teams
             </a>
           </Link>
-          {/* <Link href="/">
-            <a className={`${
-                      router.pathname === "/projects" ? active : unactive
-                    } block px-3 py-2 rounded-md text-base font-medium`}>
-              Projects
-            </a>
-          </Link> */}
           <Link href="/reports">
             <a className={`${
-                      router.pathname === "/reports" ? active : unactive
+                      router.pathname === "/reports" ? active : inactive
                     } block px-3 py-2 rounded-md text-base font-medium`}>
               Reports
             </a>

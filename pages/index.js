@@ -13,11 +13,10 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Home() {
   const {data, error} = useSWR("/api/request", fetcher);
   const [expand, setExpand] = useState("");
-
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
-
   const breach = data.Items.filter((item) => item.dueBy < Date.now());
+  const newRequests = data.Items.filter(item => item.status === "New")
 
   function OnExpand(e) {
     const value = e.currentTarget.getAttribute("value");
@@ -39,6 +38,7 @@ export default function Home() {
       <DashStats total={data.Count} title="Total Requests"/>
       <DashStats total={breach.length} title="Total Breached"/>
       <DashStats total={`${Math.round((breach.length/data.Count)*100)}%`} title="% Breached"/>
+      <DashStats total={newRequests.length} title="New Requests"/>
       </DashStatsGrid>
       <Dashboard>
         {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).map(
