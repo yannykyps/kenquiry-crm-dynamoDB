@@ -17,6 +17,8 @@ return (
       onChange={props.onChange}
       autoComplete={props.autoComplete}
       required={props.required}
+      defaultValue={props.defaultValue}
+      readOnly={props.readOnly}
     />
   </div>
 )
@@ -24,9 +26,11 @@ return (
 }
 Input.propTypes = {
   autoComplete: PropTypes.any,
+  defaultValue: PropTypes.any,
   label: PropTypes.any,
   name: PropTypes.any,
   onChange: PropTypes.any,
+  readOnly: PropTypes.any,
   required: PropTypes.any,
   type: PropTypes.any
 }

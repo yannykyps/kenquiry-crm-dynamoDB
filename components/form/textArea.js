@@ -13,6 +13,7 @@ export default function TextArea(props) {
           className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
           onChange={props.onChange}
           required={props.required}
+          value={props.value}
         ></textarea>
       </div>
     </div>
@@ -24,5 +25,6 @@ TextArea.propTypes = {
   name: PropTypes.any,
   onChange: PropTypes.any,
   required: PropTypes.any,
-  rows: PropTypes.any
+  rows: PropTypes.any,
+  value: PropTypes.any
 }

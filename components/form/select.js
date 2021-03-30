@@ -31,5 +31,5 @@ Select.propTypes = {
 }
 
 Select.Option = (props) => (
-    <option value={props.value}>{props.label}</option>
+    <option disabled={props.disabled} value={props.value}>{props.label}</option>
   );

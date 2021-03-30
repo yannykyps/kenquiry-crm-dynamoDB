@@ -4,6 +4,17 @@ import useSWR, {mutate} from "swr";
 import {useRouter} from "next/router";
 import moment from "moment";
 import members from "./teamMembers";
+import {
+  Button,
+  Container,
+  Form,
+  Header,
+  Input,
+  Select,
+  TextArea,
+  InfoContainer,
+  InfoField
+} from "./form";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -48,246 +59,118 @@ export default function Update() {
   }
 
   return (
-    <div>
+    <>
       {error && <div>Failed to load</div>}
       {!data ? (
         <div>Loading... </div>
       ) : (
-        <div className="p-8 bg-gray-100">
-          <div>
-            <div className="md:col-span-1">
-              <div className="px-4 sm:px-0 pb-4">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  Details
-                </h3>
-                <p className="mt-1 text-sm text-gray-600">Update Request</p>
-              </div>
-              <div className="grid md:grid-cols-3 md:gap-2 mb-4 shadow sm:rounded-md p-4">
-                <p>
-                  <span>Full Name: </span>
-                  <span>{data.fullName}</span>
-                </p>
-                <p>
-                  <span>Entry Date: </span>
-                  <span>
-                    {moment(data.entryDate).format("DD/MM/YY, HH:mm")}
-                  </span>
-                </p>
-                <p>
-                  <span>Due By Date: </span>
-                  <span>
-                    {moment(parseInt(data.dueBy)).format("DD/MM/YY, HH:mm")}
-                  </span>
-                </p>
-                <p>
-                  <span>Email Addrerss: </span>
-                  <span>{data.email}</span>
-                </p>
-                <p>
-                  <span>Telephone: </span>
-                  <span>{data.telephone}</span>
-                </p>
-                <p>
-                  <span>Department: </span>
-                  <span>{data.department}</span>
-                </p>
-                <p className="sm:col-span-3">
-                  <span>Address: </span>
-                  <span>{data.address}</span>
-                </p>
-                <p className="sm:col-span-3">
-                  <span>Job Description: </span>
-                  <span>{data.job}</span>
-                </p>
-                <p>
-                  <span>Team: </span>
-                  <span>{data.team}</span>
-                </p>
-                <p>
-                  <span>Job Type: </span>
-                  <span>{data.jobType}</span>
-                </p>
-                <p>
-                  <span>Response Time: </span>
-                  <span>{data.response} hour/s</span>
-                </p>
-                <p>
-                  <span>Priority: </span>
-                  <span>{data.priority}</span>
-                </p>
-                <p>
-                  <span>Current Status: </span>
-                  <span>{data.status}</span>
-                </p>
-                {data.allocated && (
-                  <p>
-                    <span>Allocated To: </span>
-                    <span>{data.allocated}</span>
-                  </p>
-                )}
-              </div>
-              {data.updates.comments && (
-                <div className="grid md:grid-cols-3 md:gap-2 mb-4 shadow sm:rounded-md p-4">
-                  <p className="sm:col-span-3">
-                    <span>Previous Update: </span>
-                    <span>{data.updates.comments}</span>
-                  </p>
-                  <p className="sm:col-span-3">
-                    <span>Updated By: </span>
-                    <span>{data.updates.updatedBy}</span>
-                  </p>
-                  <p className="sm:col-span-3">
-                    <span>Updated Date: </span>
-                    <span>
-                      {moment(data.updates.updatedDate).format(
-                        "DD/MM/YY, HH:mm"
-                      )}
-                    </span>
-                  </p>
-                </div>
+        <Container>
+          <Header title="Details" subTitle="Update Requests" />
+          <InfoContainer>
+          <InfoField label="Full Name: " value={data.fullName} gridSpan={0} />
+          <InfoField label="Entry Date: " value={moment(data.entryDate).format("DD/MM/YY, HH:mm")} gridSpan={0} />
+          <InfoField label="Due By Date: " value={moment(parseInt(data.dueBy)).format("DD/MM/YY, HH:mm")} gridSpan={0} />
+          <InfoField label="Email Address: " value={data.email} gridSpan={0} />
+          <InfoField label="Telephone: " value={data.telephone} gridSpan={0} />
+          <InfoField label="Department: " value={data.department} gridSpan={0} />
+          <InfoField label="Address: " value={data.address} gridSpan={3} />
+          <InfoField label="Job Description: " value={data.job} gridSpan={3} />
+          <InfoField label="Team: " value={data.team} gridSpan={0} />
+          <InfoField label="Job Type: " value={data.jobType} gridSpan={0} />
+          <InfoField label="Response Time: " value={`${data.response} hour/s`} gridSpan={0} />
+          <InfoField label="Priority: " value={data.priority} gridSpan={0} />
+          <InfoField label="Current Status: " value={data.status} gridSpan={0} />
+            {data.allocated && (
+              <InfoField label="Allocated To: " value={data.allocated} gridSpan={0} />
+
+            )}
+          </InfoContainer>
+          {data.updates.comments && (
+            <InfoContainer>
+            <InfoField label="Previous Update: " value={data.updates.comments} gridSpan={3} />
+            <InfoField label="Updated By: " value={data.updates.updatedBy} gridSpan={3} />
+            <InfoField label="Updated Date: " value={moment(data.updates.updatedDate).format("DD/MM/YY, HH:mm")} gridSpan={3} />
+              </InfoContainer>
+          )}
+          <Form action="#" method="POST" onSubmit={Update}>
+            <Form.Inputs>
+              <Select
+                name="status"
+                label="Status"
+                onChange={(e) => setIsStatus(e.target.value)}
+                value={isStatus}
+                required
+              >
+                <Select.Option
+                  value=""
+                  label=" -- select status -- "
+                  disabled
+                />
+                <Select.Option value="Further Action" label="Further Action" />
+                <Select.Option value="Allocated" label="Allocated" />
+                <Select.Option value="Complete" label="Complete" />
+              </Select>
+              {isStatus === "Allocated" && (
+                <Select
+                  name="allocated"
+                  label="Allocated To"
+                  onChange={(e) => setIsAllocated(e.target.value)}
+                  value={isAllocated}
+                  required
+                >
+                  <Select.Option
+                    value=""
+                    label=" -- allocate to -- "
+                    disabled
+                  />
+                  {members
+                    .filter((team) => team.team === data.team)
+                    .map((name, index) => {
+                      return (
+                        <Select.Option
+                          key={index}
+                          value={name.name}
+                          label={`${name.name} - ${name.team}`}
+                        />
+                      );
+                    })}
+                </Select>
               )}
-            </div>
-            <div className="md:grid md:grid-cols-6 md:gap-6">
-              <div className="mt-5 md:mt-0 md:col-span-6">
-                <form action="#" method="POST" onSubmit={Update}>
-                  <div className="shadow sm:rounded-md sm:overflow-hidden">
-                    <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-                      <div className="grid grid-cols-6 gap-6">
-                        <div className="col-span-6 sm:col-span-3">
-                          <label
-                            htmlFor="status"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Status
-                          </label>
-                          <select
-                            name="status"
-                            id="status"
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                            onChange={(e) => setIsStatus(e.target.value)}
-                            value={isStatus}
-                            required
-                          >
-                            <option disabled value="">
-                              {" "}
-                              -- select status --{" "}
-                            </option>
-                            <option value="Further Action">
-                              Further Action
-                            </option>
-                            <option value="Allocated">Allocated</option>
-                            <option value="Complete">Complete</option>
-                          </select>
-                        </div>
-                        {isStatus === "Allocated" && (
-                          <div className="col-span-6 sm:col-span-3">
-                            <label
-                              htmlFor="allocated"
-                              className="block text-sm font-medium text-gray-700"
-                            >
-                              Allocated To
-                            </label>
-                            <select
-                              name="allocated"
-                              id="allocated"
-                              className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              onChange={(e) => setIsAllocated(e.target.value)}
-                              value={isAllocated}
-                              required
-                            >
-                              <option disabled value="">
-                                {" "}
-                                -- allocate to --{" "}
-                              </option>
-                              {members
-                                .filter((team) => team.team === data.team)
-                                .map((name, index) => {
-                                  return (
-                                    <option key={index} value={name.name}>
-                                      {name.name} - {name.team}
-                                    </option>
-                                  );
-                                })}
-                            </select>
-                          </div>
-                        )}
-                        <div className="col-span-6 sm:col-span-3 sm:row-start-2">
-                          <label
-                            htmlFor="priority"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Priority
-                          </label>
-                          <select
-                            name="priority"
-                            id="priority"
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                            onChange={(e) => setIsPriority(e.target.value)}
-                            value={data.priority}
-                            required
-                          >
-                            <option disabled value="">
-                              {" "}
-                              -- set priority --{" "}
-                            </option>
-                            <option value="P1">P1</option>
-                            <option value="P2">P2</option>
-                            <option value="P3">P3</option>
-                            <option value="P4">P4</option>
-                          </select>
-                        </div>
-                        <div className="col-span-6">
-                          <label
-                            htmlFor="comment"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Update Comment
-                          </label>
-                          <div className="mt-1">
-                            <textarea
-                              id="comment"
-                              name="comment"
-                              rows="3"
-                              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
-                              onChange={(e) => setUpdateRequest(e.target.value)}
-                              value={updateRequest}
-                              required
-                            ></textarea>
-                          </div>
-                        </div>
-                        <div className="col-span-6 sm:col-span-3">
-                          <label
-                            htmlFor="priority"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Updated By (read only in Demo)
-                          </label>
-                          <input
-                            type="text"
-                            name="updatedBy"
-                            id="updatedBy"
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                            defaultValue="Jo Bloggs"
-                            readOnly
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                      <button
-                        type="submit"
-                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      >
-                        Update
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+              <Select
+                name="priority"
+                label="Priority"
+                onChange={(e) => setIsPriority(e.target.value)}
+                defaultValue={data.priority}
+                required
+              >
+                <Select.Option value="" label=" -- set priority -- " disabled />
+                <Select.Option value="P1" label="P1" />
+                <Select.Option value="P2" label="P2" />
+                <Select.Option value="P3" label="P3" />
+                <Select.Option value="P4" label="P4" />
+              </Select>
+              <TextArea
+                name="comment"
+                label="Update Comment"
+                rows={3}
+                onChange={(e) => setUpdateRequest(e.target.value)}
+                value={updateRequest}
+                required
+              />
+              <Input
+                type="text"
+                name="updatedBy"
+                label="Updated By (read only in Demo)"
+                defaultValue="Jo Bloggs"
+                readOnly
+              />
+            </Form.Inputs>
+            <Form.Button>
+              <Button type="submit" label="Update" />
+            </Form.Button>
+          </Form>
+        </Container>
       )}
-    </div>
+    </>
   );
 }

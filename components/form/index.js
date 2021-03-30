@@ -5,4 +5,6 @@ import Header from "./header"
 import Input from "./input"
 import Select from "./select"
 import TextArea from "./textArea"
-export {Button, Container, Form, Header, Input, Select, TextArea}
+import InfoContainer from "./infoContainer"
+import InfoField from "./infoField"
+export {Button, Container, Form, Header, Input, Select, TextArea, InfoContainer, InfoField}
