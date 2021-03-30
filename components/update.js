@@ -22,6 +22,7 @@ export default function Update() {
   const router = useRouter();
   const {id, dueBy} = router.query;
   const {data, error} = useSWR(`/api/request?id=${id}&dueBy=${dueBy}`, fetcher);
+  const {data: allocated} = useSWR(`/api/allocated`, fetcher);
   const [updateRequest, setUpdateRequest] = useState("");
   const [isStatus, setIsStatus] = useState("");
   const [isAllocated, setIsAllocated] = useState("");
@@ -126,11 +127,12 @@ export default function Update() {
                   {members
                     .filter((team) => team.team === data.team)
                     .map((name, index) => {
+                      const count = allocated.Items.filter(count => count.allocated === name.name).length
                       return (
                         <Select.Option
                           key={index}
                           value={name.name}
-                          label={`${name.name} - ${name.team}`}
+                          label={`${name.name} - ${name.team} - Allocated: ${count}`}
                         />
                       );
                     })}

@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, {useState} from "react";
 import Layout from "../components/layout";
 import SEO from "../components/SEO";
 import Title from "../components/title";
@@ -12,7 +12,7 @@ import DashStatsGrid from "../components/dashStatsGrid";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function AllocatedPage() {
-    const router = useRouter();
+  const router = useRouter();
   const {name} = router.query;
   const {data, error} = useSWR(`/api/allocated?name=${name}`, fetcher);
   const [expand, setExpand] = useState("");
@@ -33,9 +33,10 @@ export default function AllocatedPage() {
     <Layout>
       <SEO title="Allocated" />
       <Title title={`Allocated ${name}`} />
-      <DashStatsGrid grid={2}>
-      <DashStats total={data.Count} title="Total Requests"/>
-      <DashStats total={breach.length} title="Total Breached"/>
+      <DashStatsGrid grid={4}>
+        <DashStats total={data.Count} title="Total Requests" />
+        <DashStats total={breach.length} title="Total Breached" />
+        <DashStats total={`${Math.round((breach.length/data.Count)*100)}%`} title="% Breached"/>
       </DashStatsGrid>
       <Dashboard total={data.Count} breach={breach.length}>
         {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).map(

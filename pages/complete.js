@@ -18,7 +18,7 @@ export default function CompletePage() {
   return (
     <Layout>
       <SEO title="Completed Request" />
-      <Title title={`Completed Request - ${data.id}`} />
+      <Title title={`Completed Request - ${id}`} />
       <Complete
         address={data.address}
         allocated={data.allocated}
