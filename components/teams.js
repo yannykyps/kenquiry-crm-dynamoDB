@@ -13,7 +13,7 @@ export default function Teams() {
   if (!data) return <Splashscreen />;
   return (
     <Container>
-      <TableLayout>
+      <TableLayout styleClass="overflow-x-auto">
         <TableLayout.Head>
           <TableHead head="Name" />
           <TableHead head="Title" />

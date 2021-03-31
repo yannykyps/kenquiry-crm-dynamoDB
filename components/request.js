@@ -64,30 +64,30 @@ export default function Request() {
     }
   }
 
-  // const max = data.Items.reduce((pre, cur) => (parseInt(pre.id) > parseInt(cur.id)) ? pre.id : cur.id)
-  // const custId = parseInt(max)+1
-  // console.log(custId.toString());
+  const max = Math.max(...data.Items.map(o => parseInt(o.id)), 0);
+  const custId = parseInt(max)+1
+  console.log(custId.toString());
 
-  // async function AddCustomer(e) {
-  //   const max = data.Items.reduce((pre, cur) => (parseInt(pre.id) > parseInt(cur.id)) ? pre.id : cur.id)
-  // const custId = parseInt(max)+1
-  // console.log(custId.toString());
-  //   // e.preventDefault();
-  //   try {
-  //     await axios.put("/api/customers", {
-  //       id: custId.toString(),
-  //       fullname: newRequest.fullname,
-  //       email: newRequest.email,
-  //       tel: newRequest.tel,
-  //       dept: newRequest.dept,
-  //       address: newRequest.address,
-  //     });
-  //     console.log("success");
-  //     // setIsHidden(!hidden)
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  async function AddCustomer(e) {
+    const max = Math.max(...data.Items.map(o => parseInt(o.id)), 0);
+  const custId = parseInt(max)+1
+  console.log(custId.toString());
+    // e.preventDefault();
+    try {
+      await axios.put("/api/customers", {
+        id: custId.toString(),
+        fullname: newRequest.fullname,
+        email: newRequest.email,
+        tel: newRequest.tel,
+        dept: newRequest.dept,
+        address: newRequest.address,
+      });
+      console.log("success");
+      // setIsHidden(!hidden)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   function handleNewTask(e) {
     const {value, name} = e.target;
@@ -188,9 +188,9 @@ export default function Request() {
             value={newRequest.address}
             autoComplete="address"
           />
-          {/* <div>
+          <div>
           <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onClick={AddCustomer}>Add Customer</button>
-          </div> */}
+          </div>
           <TextArea
             name="job"
             label="Job Description"
