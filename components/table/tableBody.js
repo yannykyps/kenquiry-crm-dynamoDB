@@ -9,6 +9,7 @@ export default function TableBody(props) {
   const timeLeft = d - props.timeLeft;
   const timerMin = Math.round(moment.duration(timeLeft).asMinutes());
   const timerHour = Math.round(moment.duration(timeLeft).asHours());
+  const timerDay = Math.round(moment.duration(timeLeft).asDays());
   const [red, amber, green, breached] = [
     "bg-red-500",
     "bg-yellow-500",
@@ -73,7 +74,8 @@ export default function TableBody(props) {
               ? timerMin < 0
                 ? "No"
                 : "Yes"
-              : timerMin > 60 || timerMin < -60
+              : timerMin < -1440 ? timerDay + " days"
+              : timerMin > -1440 && timerMin > 60
               ? timerHour + " hours"
               : timerMin + " mins"}
           </div>

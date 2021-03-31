@@ -1,8 +1,7 @@
 import Link from "next/link";
 import members from "./teamMembers";
 import useSWR from "swr";
-import TableHead from "./table/tableHead";
-import TableLayout from "./table/tableLayout";
+import {TableHead, TableLayout} from "./table";
 import Container from "./form/container";
 import Splashscreen from "./splashscreen"
 
