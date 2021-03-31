@@ -1,5 +1,5 @@
 import Link from "next/link";
-import members from "./teamMembers";
+import members from "./data/teamMembers";
 import useSWR from "swr";
 import {TableHead, TableLayout} from "./table";
 import Container from "./form/container";

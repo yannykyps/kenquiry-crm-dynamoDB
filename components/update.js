@@ -3,7 +3,9 @@ import axios from "axios";
 import useSWR from "swr";
 import {useRouter} from "next/router";
 import moment from "moment";
-import members from "./teamMembers";
+import members from "./data/teamMembers";
+import priority from "./data/priority";
+import status from "./data/status";
 import {
   Button,
   Container,
@@ -107,9 +109,7 @@ export default function Update() {
                   label=" -- select status -- "
                   disabled
                 />
-                <Select.Option value="Further Action" label="Further Action" />
-                <Select.Option value="Allocated" label="Allocated" />
-                <Select.Option value="Complete" label="Complete" />
+                {status.map(status => (<Select.Option key={status.value} value={status.value} label={status.label} />))}
               </Select>
               {isStatus === "Allocated" && (
                 <Select
@@ -145,11 +145,7 @@ export default function Update() {
                 defaultValue={data.priority}
                 required
               >
-                <Select.Option value="" label=" -- set priority -- " disabled />
-                <Select.Option value="P1" label="P1" />
-                <Select.Option value="P2" label="P2" />
-                <Select.Option value="P3" label="P3" />
-                <Select.Option value="P4" label="P4" />
+              {priority.map(priority => (<Select.Option key={priority.value} value={priority.value} label={priority.label} />))}
               </Select>
               <TextArea
                 name="comment"

@@ -12,7 +12,7 @@ export default function Dashboard(props) {
     "Response",
     "Status",
     "Due By",
-    "Time Left",
+    "Time Left/SLA",
   ];
 
   return (
