@@ -31,8 +31,6 @@ export default function Request() {
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
 
-  console.log(newRequest);
-
   async function Add(e) {
     e.preventDefault();
     try {
@@ -188,9 +186,9 @@ export default function Request() {
             value={newRequest.address}
             autoComplete="address"
           />
-          <div>
+          {/* <div>
           <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onClick={AddCustomer}>Add Customer</button>
-          </div>
+          </div> */}
           <TextArea
             name="job"
             label="Job Description"
