@@ -4,6 +4,7 @@ import SEO from "../components/SEO";
 import Title from "../components/title";
 import useSWR from "swr";
 import {useRouter} from "next/router";
+import Splashscreen from "../components/splashscreen";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -13,7 +14,7 @@ export default function CompletePage() {
   const {data, error} = useSWR(`/api/report?id=${id}&dueBy=${dueBy}`, fetcher);
 
   if (error) return <div>Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
+  if (!data) return <Splashscreen />;
 
   return (
     <Layout>

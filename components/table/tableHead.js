@@ -4,7 +4,7 @@ export default function TableHead(props) {
       
     <th
       scope="col"
-      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+      className={`${props.styleClass ? props.styleClass : "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"}`}
     >
       {props.head}
     </th>
@@ -12,5 +12,6 @@ export default function TableHead(props) {
 }
 
 TableHead.propTypes = {
-  head: PropTypes.any.isRequired
+  head: PropTypes.any.isRequired,
+  styleClass: PropTypes.any
 }

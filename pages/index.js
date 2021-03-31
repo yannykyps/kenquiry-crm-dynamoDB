@@ -7,6 +7,7 @@ import useSWR from "swr";
 import TableBody from "../components/table/tableBody";
 import DashStats from "../components/dashStats";
 import DashStatsGrid from "../components/dashStatsGrid";
+import Splashscreen from "../components/splashscreen";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -14,10 +15,10 @@ export default function Home() {
   const {data, error} = useSWR("/api/request", fetcher);
   const [expand, setExpand] = useState("");
   if (error) return <div>Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
+  if (!data) return <Splashscreen />;
   const breach = data.Items.filter((item) => item.dueBy < Date.now());
   const newRequests = data.Items.filter(item => item.status === "New")
-
+  
   function OnExpand(e) {
     const value = e.currentTarget.getAttribute("value");
     if (value !== expand) {
@@ -33,7 +34,7 @@ export default function Home() {
       <Title
         title="Dashboard"
         subTitle="Dashboard used to monitor all active requests for your team. With authentication added, you can restrict access to show only your teams requests."
-      />
+      /> 
       <DashStatsGrid grid={4}>
       <DashStats total={data.Count} title="Total Requests"/>
       <DashStats total={breach.length} title="Total Breached"/>

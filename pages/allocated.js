@@ -8,6 +8,7 @@ import TableBody from "../components/table/tableBody";
 import Dashboard from "../components/dashboard";
 import DashStats from "../components/dashStats";
 import DashStatsGrid from "../components/dashStatsGrid";
+import Splashscreen from "../components/splashscreen";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -17,7 +18,7 @@ export default function AllocatedPage() {
   const {data, error} = useSWR(`/api/allocated?name=${name}`, fetcher);
   const [expand, setExpand] = useState("");
   if (error) return <div>Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
+  if (!data) return <Splashscreen />;
   const breach = data.Items.filter((item) => item.dueBy < Date.now());
 
   function OnExpand(e) {

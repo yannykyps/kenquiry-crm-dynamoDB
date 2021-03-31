@@ -7,6 +7,7 @@ import Dashboard from '../components/dashboard'
 import TableBody from "../components/table/tableBody";
 import DashStatsGrid from "../components/dashStatsGrid";
 import DashStats from "../components/dashStats";
+import Splashscreen from "../components/splashscreen";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -14,7 +15,7 @@ export default function ReportsPage () {
     const {data, error} = useSWR(`/api/report`, fetcher);
     const [expand, setExpand] = useState("");
     if (error) return <div>Failed to load</div>;
-    if (!data) return <div>Loading...</div>;
+    if (!data) return <Splashscreen />;
     const breach = data.Items.filter((item) => item.dueBy < item.updates.updatedDate);
     const sla = data.Items.filter((item) => item.dueBy > item.updates.updatedDate);
 

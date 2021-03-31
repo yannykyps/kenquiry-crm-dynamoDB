@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {TableHead, TableLayout} from "./table"
+import {TableHead, TableLayout, TableContainer} from "./table"
 
 
 export default function Dashboard(props) {
@@ -17,6 +17,7 @@ export default function Dashboard(props) {
 
   return (
     <>
+    <TableContainer>
       <TableLayout>
         <TableLayout.Head>
           {tableHead.map((head) => (
@@ -27,6 +28,7 @@ export default function Dashboard(props) {
         {props.children}
         </TableLayout.Body>
       </TableLayout>
+      </TableContainer>
     </>
   );
 }
