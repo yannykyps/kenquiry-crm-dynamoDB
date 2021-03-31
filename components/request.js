@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState } from "react";
 import axios from "axios";
 import {useRouter} from "next/router";
 import useSWR from "swr";
@@ -83,6 +83,9 @@ export default function Request() {
       department: cust.department,
       address: cust.address,
     }));
+
+    document.querySelector("textarea").focus()
+ 
   }
 
   function handleModalClick() {
