@@ -7,6 +7,7 @@ import {Button, Container, Form, Header, Input, Select, TextArea} from "./form";
 import responseTimes from "./data/responseTimes";
 import teams from "./data/teams";
 import jobTypes from "./data/jobTypes";
+import Modal from "./modal"
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -23,6 +24,7 @@ export default function Request() {
     address: "",
   });
   const [customer, setCustomer] = useState("");
+  const [hidden, setIsHidden] = useState(true);
   const router = useRouter();
   const uid = "KEN" + nanoid(10);
 
@@ -54,8 +56,7 @@ export default function Request() {
             : "P4",
       });
       console.log("success");
-      router.push("/");
-      window.alert("Request Logged " + uid);
+      setIsHidden(!hidden)
     } catch (error) {
       console.log(error);
     }
@@ -84,10 +85,16 @@ export default function Request() {
     }));
   }
 
+  function handleModalClick() {
+    setIsHidden(!hidden)
+    router.push("/");
+  }
+
+  
   return (
     <Container>
       <Header title="Details" subTitle="Complete Request Form." />
-
+      <Modal show={hidden} onClick={handleModalClick} getRef={uid} crud="logged"/>
       <Form action="#" method="POST" onSubmit={Add}>
         <Form.Inputs>
           <Select

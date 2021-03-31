@@ -6,6 +6,7 @@ import moment from "moment";
 import members from "./data/teamMembers";
 import priority from "./data/priority";
 import status from "./data/status";
+import Modal from "./modal"
 import {
   Button,
   Container,
@@ -29,6 +30,7 @@ export default function Update() {
   const [isStatus, setIsStatus] = useState("");
   const [isAllocated, setIsAllocated] = useState("");
   const [isPriority, setIsPriority] = useState("");
+  const [hidden, setIsHidden] = useState(true);
 
   const updatedBy = "Jo Bloggs";
 
@@ -53,12 +55,16 @@ export default function Update() {
       })
       .then(function (response) {
         console.log(response);
-        router.push("/");
-        window.alert("Request Updated " + data.id);
+        setIsHidden(!hidden)
       })
       .catch(function (error) {
         console.log(error);
       });
+  }
+
+  function handleModalClick() {
+    setIsHidden(!hidden)
+    router.push("/");
   }
 
   return (
@@ -69,6 +75,7 @@ export default function Update() {
       ) : (
         <Container>
           <Header title="Details" subTitle="Update Requests" />
+          <Modal show={hidden} onClick={handleModalClick} getRef={data.id} crud="updated"/>
           <InfoContainer>
           <InfoField label="Full Name: " value={data.fullName} gridSpan={0} />
           <InfoField label="Entry Date: " value={moment(data.entryDate).format("DD/MM/YY, HH:mm")} gridSpan={0} />
