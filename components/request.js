@@ -19,8 +19,8 @@ export default function Request() {
     response: 24,
     fullname: "",
     email: "",
-    telephone: "",
-    department: "",
+    tel: "",
+    dept: "",
     address: "",
   });
   const [customer, setCustomer] = useState("");
@@ -30,6 +30,8 @@ export default function Request() {
 
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
+
+  console.log(newRequest);
 
   async function Add(e) {
     e.preventDefault();
@@ -62,6 +64,27 @@ export default function Request() {
     }
   }
 
+  // async function AddCustomer(e) {
+  //   const max = data.Items.reduce((pre, cur) => (parseInt(pre.id) > parseInt(cur.id)) ? pre.id : cur.id)
+  // const custId = parseInt(max)+1
+  // console.log(custId.toString());
+  //   // e.preventDefault();
+  //   try {
+  //     await axios.put("/api/customers", {
+  //       id: custId.toString(),
+  //       fullname: newRequest.fullname,
+  //       email: newRequest.email,
+  //       tel: newRequest.tel,
+  //       dept: newRequest.dept,
+  //       address: newRequest.address,
+  //     });
+  //     console.log("success");
+  //     setIsHidden(!hidden)
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
   function handleNewTask(e) {
     const {value, name} = e.target;
     setNewRequest((prevValue) => ({
@@ -79,8 +102,8 @@ export default function Request() {
       ...prevValue,
       fullname: cust.fullName,
       email: cust.email,
-      telephone: cust.telephone,
-      department: cust.department,
+      tel: cust.telephone,
+      dept: cust.department,
       address: cust.address,
     }));
 
@@ -92,7 +115,6 @@ export default function Request() {
     setIsHidden(!hidden)
     router.push("/");
   }
-
   
   return (
     <Container>
@@ -105,7 +127,6 @@ export default function Request() {
             label="Existing Customers"
             onChange={handleExistingCustomer}
             value={customer}
-            required
           >
             <Select.Option
               value=""
@@ -144,7 +165,7 @@ export default function Request() {
             label="Telephone"
             onChange={handleNewTask}
             autoComplete="tel"
-            value={newRequest.telephone}
+            value={newRequest.tel}
             required
           />
           <Input
@@ -152,7 +173,7 @@ export default function Request() {
             name="dept"
             label="Department"
             onChange={handleNewTask}
-            value={newRequest.department}
+            value={newRequest.dept}
             required
           />
           <Input
@@ -163,6 +184,9 @@ export default function Request() {
             value={newRequest.address}
             autoComplete="address"
           />
+          {/* <div>
+          <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onClick={AddCustomer}>Add Customer</button>
+          </div> */}
           <TextArea
             name="job"
             label="Job Description"
