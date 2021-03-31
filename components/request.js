@@ -64,6 +64,10 @@ export default function Request() {
     }
   }
 
+  // const max = data.Items.reduce((pre, cur) => (parseInt(pre.id) > parseInt(cur.id)) ? pre.id : cur.id)
+  // const custId = parseInt(max)+1
+  // console.log(custId.toString());
+
   // async function AddCustomer(e) {
   //   const max = data.Items.reduce((pre, cur) => (parseInt(pre.id) > parseInt(cur.id)) ? pre.id : cur.id)
   // const custId = parseInt(max)+1
@@ -79,7 +83,7 @@ export default function Request() {
   //       address: newRequest.address,
   //     });
   //     console.log("success");
-  //     setIsHidden(!hidden)
+  //     // setIsHidden(!hidden)
   //   } catch (error) {
   //     console.log(error);
   //   }
