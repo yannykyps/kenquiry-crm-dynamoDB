@@ -35,7 +35,7 @@ export default function Home() {
         title="Dashboard"
         subTitle="Dashboard used to monitor all active requests for your team. With authentication added, you can restrict access to show only your teams requests."
       /> 
-      <DashStatsGrid grid={4}>
+      <DashStatsGrid>
       <DashStats total={data.Count} title="Total Requests"/>
       <DashStats total={breach.length} title="Total Breached"/>
       <DashStats total={`${Math.round((breach.length/data.Count)*100)}%`} title="% Breached"/>

@@ -32,7 +32,7 @@ export default function ReportsPage () {
         <Layout>
             <SEO title="Reports" />
             <Title title="Reports" subTitle="Use reports to anaylse SLAs, KPIs and any bespoke anaylsis. Sample below is a report showing completed requests" />
-            <DashStatsGrid grid={4}>
+            <DashStatsGrid>
                 <DashStats total={data.Count} title="Total Complete" />
                 <DashStats total={sla.length} title="SLA Met" />
                 <DashStats total={breach.length} title="SLA Not Met" />

@@ -34,7 +34,7 @@ export default function AllocatedPage() {
     <Layout>
       <SEO title="Allocated" />
       <Title title={`Allocated ${name}`} />
-      <DashStatsGrid grid={4}>
+      <DashStatsGrid>
         <DashStats total={data.Count} title="Total Requests" />
         <DashStats total={breach.length} title="Total Breached" />
         <DashStats total={`${Math.round((breach.length/data.Count)*100)}%`} title="% Breached"/>
