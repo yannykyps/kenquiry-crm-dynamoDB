@@ -46,11 +46,11 @@ export default function Modal(props) {
                   className="text-lg leading-6 font-medium text-gray-900"
                   id="modal-title"
                 >
-                  Request has been {props.crud}
+                  {props.text}
                 </h3>
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">
-                    Ref No: {props.getRef}
+                    {props.getRef}
                   </p>
                 </div>
               </div>

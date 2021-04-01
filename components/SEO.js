@@ -15,6 +15,7 @@ const SEO = ({title, description}) => {
           />
           <meta name="og:title" content={siteTitle} />
           <meta name="twitter:card" content="summary_large_image" />
+          <link rel="preload" href="/api/request" as="fetch" crossorigin="anonymous"></link>
         </Head> 
     )
 }

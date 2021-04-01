@@ -75,7 +75,7 @@ export default function TableBody(props) {
                 ? "No"
                 : "Yes"
               : timerMin < -1440 ? timerDay + " days"
-              : timerMin > -1440 && timerMin > 60
+              : (timerMin > -1440 && timerMin < -60) || timerMin > 60
               ? timerHour + " hours"
               : timerMin + " mins"}
           </div>
