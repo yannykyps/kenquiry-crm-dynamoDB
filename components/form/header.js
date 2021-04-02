@@ -12,6 +12,6 @@ export default function Header(props) {
   );
 }
 Header.propTypes = {
-  subTitle: PropTypes.any,
-  title: PropTypes.any
+  subTitle: PropTypes.string,
+  title: PropTypes.string.isRequired
 }

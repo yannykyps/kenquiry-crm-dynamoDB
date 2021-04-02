@@ -11,6 +11,6 @@ return (
 
 }
 DashStats.propTypes = {
-  title: PropTypes.any,
-  total: PropTypes.any
+  title: PropTypes.string.isRequired,
+  total: PropTypes.any.isRequired
 }

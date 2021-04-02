@@ -22,12 +22,12 @@ export default function Select(props) {
 
 Select.propTypes = {
   children: PropTypes.any,
-  defaultValue: PropTypes.any,
-  label: PropTypes.any,
-  name: PropTypes.any,
-  onChange: PropTypes.any,
-  required: PropTypes.any,
-  value: PropTypes.any
+  defaultValue: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  required: PropTypes.bool,
+  value: PropTypes.string
 }
 
 Select.Option = (props) => (

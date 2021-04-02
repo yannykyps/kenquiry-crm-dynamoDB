@@ -15,7 +15,7 @@ const SEO = ({title, description}) => {
           />
           <meta name="og:title" content={siteTitle} />
           <meta name="twitter:card" content="summary_large_image" />
-          <link rel="preload" href="/api/request" as="fetch" crossorigin="anonymous"></link>
+          <link rel="preload" href="/api/request" as="fetch" crossOrigin="anonymous"></link>
         </Head> 
     )
 }
@@ -25,7 +25,7 @@ const SEO = ({title, description}) => {
 export default SEO
 
 SEO.propTypes = {
-  description: PropTypes.any,
-  title: PropTypes.any.isRequired
+  description: PropTypes.string,
+  title: PropTypes.string.isRequired
 }
 

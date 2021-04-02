@@ -26,13 +26,13 @@ return (
 
 }
 Input.propTypes = {
-  autoComplete: PropTypes.any,
-  defaultValue: PropTypes.any,
-  label: PropTypes.any,
-  name: PropTypes.any,
-  onChange: PropTypes.any,
-  readOnly: PropTypes.any,
-  required: PropTypes.any,
-  type: PropTypes.any,
-  value: PropTypes.any
+  autoComplete: PropTypes.string,
+  defaultValue: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  readOnly: PropTypes.bool,
+  required: PropTypes.bool,
+  type: PropTypes.string.isRequired,
+  value: PropTypes.string
 }

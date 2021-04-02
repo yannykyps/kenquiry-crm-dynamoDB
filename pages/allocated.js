@@ -54,7 +54,7 @@ export default function AllocatedPage() {
                 status={item.status}
                 team={item.team}
                 timeLeft={Date.now()}
-                OnExpand={OnExpand}
+                onClick={OnExpand}
                 expand={expand}
               />
             );

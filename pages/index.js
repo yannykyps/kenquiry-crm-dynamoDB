@@ -56,7 +56,7 @@ export default function Home() {
                 status={item.status}
                 team={item.team}
                 timeLeft={Date.now()}
-                OnExpand={OnExpand}
+                onClick={OnExpand}
                 expand={expand}
               />
             );

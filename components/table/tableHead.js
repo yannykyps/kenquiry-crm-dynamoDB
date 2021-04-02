@@ -12,6 +12,6 @@ export default function TableHead(props) {
 }
 
 TableHead.propTypes = {
-  head: PropTypes.any.isRequired,
-  styleClass: PropTypes.any
+  head: PropTypes.string.isRequired,
+  styleClass: PropTypes.string
 }

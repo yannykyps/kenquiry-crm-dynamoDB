@@ -13,6 +13,6 @@ export default function Button(props) {
 }
 
 Button.propTypes = {
-  label: PropTypes.any,
-  type: PropTypes.any
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string
 }

@@ -21,10 +21,10 @@ export default function TextArea(props) {
 }
 
 TextArea.propTypes = {
-  label: PropTypes.any,
-  name: PropTypes.any,
-  onChange: PropTypes.any,
-  required: PropTypes.any,
-  rows: PropTypes.any,
-  value: PropTypes.any
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  required: PropTypes.bool,
+  rows: PropTypes.number,
+  value: PropTypes.string
 }

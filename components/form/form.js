@@ -14,10 +14,10 @@ export default function Form(props) {
 }
 
 Form.propTypes = {
-  action: PropTypes.any,
-  children: PropTypes.any,
-  method: PropTypes.any,
-  onSubmit: PropTypes.any
+  action: PropTypes.string.isRequired,
+  children: PropTypes.array.isRequired,
+  method: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired
 }
 
 Form.Inputs = (props) => (

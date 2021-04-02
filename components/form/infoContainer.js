@@ -7,5 +7,5 @@ export default function InfoContainer({children}) {
   );
 }
 InfoContainer.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.array
 }

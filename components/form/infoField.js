@@ -9,7 +9,7 @@ export default function InfoField(props) {
 }
 
 InfoField.propTypes = {
-  gridSpan: PropTypes.any,
-  label: PropTypes.any,
-  value: PropTypes.any
+  gridSpan: PropTypes.number,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string
 }

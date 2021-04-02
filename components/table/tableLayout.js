@@ -15,8 +15,8 @@ export default function TableLayout({children, styleClass}) {
 }
 
 TableLayout.propTypes = {
-  children: PropTypes.any.isRequired,
-  styleClass: PropTypes.any
+  children: PropTypes.array.isRequired,
+  styleClass: PropTypes.string
 }
 
 TableLayout.Head = (props) => (

@@ -72,6 +72,6 @@ export default function Modal(props) {
 }
 
 Modal.propTypes = {
-  onClick: PropTypes.any.isRequired,
-  show: PropTypes.any.isRequired,
+  onClick: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired,
 };

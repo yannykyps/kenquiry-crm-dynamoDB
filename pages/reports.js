@@ -53,7 +53,7 @@ export default function ReportsPage () {
                 status={item.status}
                 team={item.team}
                 timeLeft={item.updates.updatedDate}
-                OnExpand={OnExpand}
+                onClick={OnExpand}
                 expand={expand}
                 report
               />

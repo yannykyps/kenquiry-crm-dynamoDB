@@ -3,6 +3,7 @@ import moment from "moment";
 import React from "react";
 import Link from "next/link";
 import TableData from "./tableData";
+import TableDataStatus from "./tableDataStatus";
 
 export default function TableBody(props) {
   const d = parseInt(props.dueBy);
@@ -22,7 +23,7 @@ export default function TableBody(props) {
       <tr
         className="cursor-pointer hover:bg-gray-200"
         value={props.id}
-        onClick={props.OnExpand}
+        onClick={props.onClick}
       >
         <Link
           href={
@@ -43,71 +44,51 @@ export default function TableBody(props) {
         <TableData>{props.fullName}</TableData>
         <TableData>{props.team}</TableData>
         <TableData>{props.response} hr/s</TableData>
-        <td className="px-6 py-2 whitespace-nowrap">
-          <span
-            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-              props.status === "New"
+        <TableDataStatus styleClass={props.status === "New"
                 ? "bg-green-100 text-green-800"
                 : props.status === "Allocated"
                 ? "bg-yellow-100 text-yellow-800"
-                : "bg-red-100 text-red-800"
-            }`}
-          >
-            {props.status}
-          </span>
-        </td>
+                : "bg-red-100 text-red-800"} >
+                  {props.status}
+                </TableDataStatus>
         <TableData>{moment(d).format("DD/MM/YY, HH:mm")}</TableData>
-
-        <td className="px-6 py-2 whitespace-nowrap">
-          <div
-            className={`${
-              timerMin < 0
+          <TableDataStatus styleClass={`text-white ${timerMin < 0
                 ? breached
                 : timerMin > 0 && timerMin < 480
                 ? red
                 : timerMin > 480 && timerMin < 1440
                 ? amber
-                : green
-            } px-2 text-sm text-white rounded-full inline-flex`}
-          >
-            {props.report
+                : green}`}>
+                 {props.report
               ? timerMin < 0
                 ? "No"
                 : "Yes"
               : timerMin < -1440 ? timerDay + " days"
               : (timerMin > -1440 && timerMin < -60) || timerMin > 60
               ? timerHour + " hours"
-              : timerMin + " mins"}
-          </div>
-        </td>
+              : timerMin + " mins"} 
+                </TableDataStatus>
       </tr>
       <tr>
-        <td
-          colSpan="8"
-          className={`p-2 whitespace-nowrap ${
-            props.id !== props.expand && "hidden"
-          }`}
-        >
-          <div className="pl-4 text-sm text-gray-900">
-            Job Description: {props.job}
-          </div>
-        </td>
+      <TableData colSpan="8" styleClass={props.id !== props.expand && "hidden"}>
+      Job Description: {props.job} 
+      </TableData>
       </tr>
     </tbody>
   );
 }
 
 TableBody.propTypes = {
-  OnExpand: PropTypes.any.isRequired,
-  dueBy: PropTypes.any.isRequired,
-  entryDate: PropTypes.any.isRequired,
-  expand: PropTypes.any.isRequired,
-  fullName: PropTypes.any.isRequired,
-  id: PropTypes.any.isRequired,
-  job: PropTypes.any.isRequired,
-  report: PropTypes.any,
+  onClick: PropTypes.func.isRequired,
+  dueBy: PropTypes.string.isRequired,
+  entryDate: PropTypes.number.isRequired,
+  expand: PropTypes.string.isRequired,
+  fullName: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  job: PropTypes.string.isRequired,
+  report: PropTypes.bool,
   response: PropTypes.any.isRequired,
   status: PropTypes.string.isRequired,
-  team: PropTypes.any.isRequired,
-  timeLeft: PropTypes.any,
+  team: PropTypes.string.isRequired,
+  timeLeft: PropTypes.number,
 };

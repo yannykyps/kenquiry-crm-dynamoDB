@@ -13,5 +13,5 @@ export default function TableContainer({children}) {
   );
 }
 TableContainer.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.object.isRequired
 }

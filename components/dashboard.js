@@ -34,5 +34,5 @@ export default function Dashboard(props) {
 }
 
 Dashboard.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.array.isRequired,
 }
