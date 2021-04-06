@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import axios from "axios";
 import useSWR from "swr";
 import {nanoid} from "nanoid";
 import {useRouter} from "next/router";
@@ -25,14 +24,19 @@ export default function Request() {
     dept: "",
     address: "",
     priority: "P3",
-    status: "New"
+    status: "New",
   });
   const [customer, setCustomer] = useState("");
   const [hidden, setIsHidden] = useState(true);
-  const [hiddenCust, setIsHiddenCust] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const router = useRouter();
-
+  const [modal, setModal] = useState({
+    ref: "",
+    text: "",
+    success: true,
+    type: "",
+  });
+  
   useEffect(() => {
     if (data) {
       setNewRequest((prevValue) => ({
@@ -54,24 +58,34 @@ export default function Request() {
     await fetch("/api/request", {
       method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(newRequest)
+      body: JSON.stringify(newRequest),
     })
-    .then(response => response.json())
-    .then(data => {
-      setIsHidden(!hidden);
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error", error)
-    })
+      .then((response) => response.json())
+      .then((data) => {
+        setModal({
+          ref: `Ref No: ${uid}`,
+          text: "Request Has Been Logged",
+          success: true,
+          type: "request",
+        });
+        setIsHidden(!hidden);
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
   }
 
   async function AddCustomer(e) {
     const max = Math.max(...data.Items.map((o) => parseInt(o.id)), 0);
     const custId = parseInt(max) + 1;
-    console.log(custId.toString());
+    const findCustomer = data.Items.findIndex(
+      (cust) => cust.email === newRequest.email
+    );
+    const emailRe = /\S+@\S+\.\S+/
+    const telRe = /^\d{11}$/
     e.preventDefault();
     const newCustomer = {
       id: custId.toString(),
@@ -80,23 +94,50 @@ export default function Request() {
       tel: newRequest.tel,
       dept: newRequest.dept,
       address: newRequest.address,
-     }
-     await fetch("/api/customers", {
-      method: "PUT",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newCustomer)
-    })
-    .then(response => response.json())
-    .then(data => {
-      setDisabled(true)
-      setIsHiddenCust(!hiddenCust);
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error", error)
-    })
+    };
+    if (emailRe.test(newCustomer.email) && telRe.test(newCustomer.tel)){
+      if (findCustomer === -1) {
+        await fetch("/api/customers", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newCustomer),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setDisabled(true);
+            setModal({
+              ref: newRequest.fullname,
+              text: "Customer Has Been Added",
+              success: true,
+              type: "customer",
+            });
+            setIsHidden(!hidden);
+            console.log("Success:", data);
+          })
+          .catch((error) => {
+            console.error("Error", error);
+          });
+      } else {
+        setModal({
+          ref: newRequest.fullname,
+          text: "Customer Already Exists",
+          success: false,
+          type: "customer",
+        });
+        setIsHidden(!hidden);
+      }
+    } else {
+      setModal({
+        ref: `${!emailRe.test(newCustomer.email) ? "Invalid Email - Check email address is valid" : !telRe.test(newCustomer.tel) ? "Invalid Telephone Number. Must contain 11 digits and no characters or symbols" : ""}`,
+        text: "Validation Error",
+        success: false,
+        type: "customer",
+      });
+      setIsHidden(!hidden);
+    }
+
   }
 
   function handleNewTask(e) {
@@ -120,17 +161,14 @@ export default function Request() {
       dept: cust.department,
       address: cust.address,
     }));
-
     document.querySelector("textarea").focus();
   }
 
   function handleModalClick() {
     setIsHidden(!hidden);
-    router.push("/");
-  }
-
-  function handleModalClickCust() {
-    setIsHiddenCust(!hiddenCust);
+    if (modal.type !== "customer") {
+      router.push("/");
+    }
   }
 
   return (
@@ -144,14 +182,9 @@ export default function Request() {
           <Modal
             show={hidden}
             onClick={handleModalClick}
-            getRef={`Ref No: ${uid}`}
-            text="Request has been logged"
-          />
-          <Modal
-            show={hiddenCust}
-            onClick={handleModalClickCust}
-            getRef={data.fullname}
-            text="Customer has been added"
+            getRef={modal.ref}
+            text={modal.text}
+            success={modal.success}
           />
           <Form action="#" method="POST" onSubmit={AddRequest}>
             <Form.Inputs>
@@ -217,9 +250,16 @@ export default function Request() {
                 value={newRequest.address}
                 autoComplete="address"
               />
-              <div>
-          <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onClick={AddCustomer} disabled={disabled}>Add Customer</button>
-          </div>
+              <div className="pt-6 col-span-6 sm:col-span-3">
+                <button
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  onClick={AddCustomer}
+                  disabled={disabled}
+                  type="submit"
+                >
+                  Add Customer
+                </button>
+              </div>
               <TextArea
                 name="job"
                 label="Job Description"

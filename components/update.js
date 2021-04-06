@@ -40,6 +40,14 @@ export default function Update() {
     updatedDate: Date.now(),
   });
 
+  useEffect(() => {
+    setUpdateReq((prevValue) => ({
+      ...prevValue,
+      id: id,
+      dueBy: dueBy,
+    }));
+  }, [id, dueBy]);
+
   function handleUpdateReq(e) {
     const {value, name} = e.target;
     setUpdateReq((prevValue) => ({
@@ -53,8 +61,6 @@ export default function Update() {
       }));
     }
   }
-
-  console.log(updateReq);
 
   function UpdateRequest(e) {
     e.preventDefault();
@@ -229,23 +235,28 @@ export default function Update() {
                 </Select>
               )}
               {updateReq.status !== "Complete" && (
-              <Select
-                name="priority"
-                label="Priority"
-                onChange={handleUpdateReq}
-                value={updateReq.priority}
-                // value={update.priority}
-                required
-              >
-                <Select.Option value="" label=" -- set priority -- " disabled />
-                {priority.map((priority) => (
+                <Select
+                  name="priority"
+                  label="Priority"
+                  onChange={handleUpdateReq}
+                  value={updateReq.priority}
+                  // value={update.priority}
+                  required
+                >
                   <Select.Option
-                    key={priority.value}
-                    value={priority.value}
-                    label={priority.label}
+                    value=""
+                    label=" -- set priority -- "
+                    disabled
                   />
-                ))}
-              </Select>)}
+                  {priority.map((priority) => (
+                    <Select.Option
+                      key={priority.value}
+                      value={priority.value}
+                      label={priority.label}
+                    />
+                  ))}
+                </Select>
+              )}
               <TextArea
                 name="comments"
                 label="Update Comment"
@@ -271,4 +282,3 @@ export default function Update() {
     </>
   );
 }
-
