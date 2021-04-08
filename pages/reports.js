@@ -38,7 +38,7 @@ export default function ReportsPage () {
                 <DashStats total={breach.length} title="SLA Not Met" />
                 <DashStats total={`${Math.round((sla.length/data.Count)*100)}%`} title="% SLA" />
             </DashStatsGrid>
-            <Dashboard>
+            <Dashboard completed>
             {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).map(
           (item) => {
             return (
@@ -56,6 +56,8 @@ export default function ReportsPage () {
                 onClick={OnExpand}
                 expand={expand}
                 report
+                completedDate={item.updates.updatedDate}
+                completed
               />
             );
           }

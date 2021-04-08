@@ -113,6 +113,15 @@ export default function Navbar() {
                     Reports
                   </a>
                 </Link>
+                <Link href="/analysis">
+                  <a
+                    className={`${
+                      router.pathname === "/analysis" ? active : inactive
+                    } px-3 py-2 rounded-md text-sm font-medium`}
+                  >
+                    Analysis
+                  </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -163,17 +172,6 @@ export default function Navbar() {
                   />
                 </button>
               </div>
-
-              {/* <!--
-            Dropdown menu, show/hide based on menu state.
-
-            Entering: "transition ease-out duration-100"
-              From: "transform opacity-0 scale-95"
-              To: "transform opacity-100 scale-100"
-            Leaving: "transition ease-in duration-75"
-              From: "transform opacity-100 scale-100"
-              To: "transform opacity-0 scale-95"
-          --> */}
               <Transition
                 show={isOpenProfile}
                 enter="transition ease-out duration-100"
@@ -251,6 +249,13 @@ export default function Navbar() {
                       router.pathname === "/reports" ? active : inactive
                     } block px-3 py-2 rounded-md text-base font-medium`}>
               Reports
+            </a>
+          </Link>
+          <Link href="/analysis">
+            <a className={`${
+                      router.pathname === "/analysis" ? active : inactive
+                    } block px-3 py-2 rounded-md text-base font-medium`}>
+              Analysis
             </a>
           </Link>
           <Link href="/request">

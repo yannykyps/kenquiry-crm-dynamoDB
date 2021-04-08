@@ -11,8 +11,6 @@ export default function Dashboard(props) {
     "Team",
     "Response",
     "Status",
-    "Due By",
-    "Time Left/SLA",
   ];
 
   return (
@@ -23,6 +21,8 @@ export default function Dashboard(props) {
           {tableHead.map((head) => (
             <TableHead key={head} head={head} />
           ))}
+          <TableHead head={props.completed ? "Completed Date" : "Due By"}/>
+          <TableHead head={props.completed ? "SLA" : "Time Left"}/>
         </TableLayout.Head>
         <TableLayout.Body>
         {props.children}
@@ -35,4 +35,5 @@ export default function Dashboard(props) {
 
 Dashboard.propTypes = {
   children: PropTypes.array.isRequired,
+  completed: PropTypes.bool
 }

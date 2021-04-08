@@ -51,7 +51,7 @@ export default function TableBody(props) {
                 : "bg-red-100 text-red-800"} >
                   {props.status}
                 </TableDataStatus>
-        <TableData>{moment(d).format("DD/MM/YY, HH:mm")}</TableData>
+        <TableData>{props.completed ? moment(props.completedDate).format("DD/MM/YY, HH:mm") : moment(d).format("DD/MM/YY, HH:mm")}</TableData>
           <TableDataStatus styleClass={`text-white ${timerMin < 0
                 ? breached
                 : timerMin > 0 && timerMin < 480
@@ -79,16 +79,18 @@ export default function TableBody(props) {
 }
 
 TableBody.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  completed: PropTypes.bool,
+  completedDate: PropTypes.any,
   dueBy: PropTypes.string.isRequired,
   entryDate: PropTypes.number.isRequired,
   expand: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   job: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
   report: PropTypes.bool,
   response: PropTypes.any.isRequired,
   status: PropTypes.string.isRequired,
   team: PropTypes.string.isRequired,
-  timeLeft: PropTypes.number,
-};
+  timeLeft: PropTypes.number
+}
