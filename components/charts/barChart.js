@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import * as d3 from "d3";
 import useSWR from "swr";
-import responsivefy from "./responsivefy"
+import responsivefy from "./responsivefy";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -36,17 +36,23 @@ const BarChart = () => {
         },
       ];
       const svg = d3
-        .select(".chart")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        // .select(".chart")
+        .select(".svg-chart")
         .call(responsivefy)
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+      svg.selectAll("*").remove();
+      // .append("svg")
+      // .attr("width", width + margin.left + margin.right)
+      // .attr("height", height + margin.top + margin.bottom)
+      // svg.call(responsivefy)
+      // .append("g")
+      // .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
       const yScale = d3
         .scaleLinear()
-        .domain([0, d3.max(newData, d => d.total)+1])
+        .domain([0, d3.max(newData, (d) => d.total) + 1])
         .range([height, 0]);
       const yAxis = d3.axisLeft(yScale);
       svg.call(yAxis);
@@ -82,7 +88,7 @@ const BarChart = () => {
         .style("text-decoration", "underline")
         .text("Requests Per Team");
     }
-  },[data]);
+  }, [data]);
 
   return (
     <>
@@ -90,7 +96,13 @@ const BarChart = () => {
       {!data ? (
         <div>Loading... </div>
       ) : (
-       <div className="chart max-w-sm max-h-screen border border-solid border-black bg-white"/>
+        <div className="max-w-sm max-h-screen border border-solid border-black bg-white">
+          <svg
+            className="svg-chart"
+            width={width + margin.left + margin.right}
+            height={height + margin.top + margin.bottom}
+          />
+        </div>
       )}
     </>
   );
@@ -98,4 +110,3 @@ const BarChart = () => {
 
 export default BarChart;
 
- 
