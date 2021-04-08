@@ -8,17 +8,20 @@ import TableBody from "../components/table/tableBody";
 import DashStats from "../components/dashStats";
 import DashStatsGrid from "../components/dashStatsGrid";
 import Splashscreen from "../components/splashscreen";
+import {useRouter} from "next/router";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Home() {
   const {data, error} = useSWR("/api/request", fetcher);
   const [expand, setExpand] = useState("");
+  const router = useRouter();
+  const {team} = router.query;
   if (error) return <div>Failed to load</div>;
   if (!data) return <Splashscreen />;
   const breach = data.Items.filter((item) => item.dueBy < Date.now());
   const newRequests = data.Items.filter(item => item.status === "New")
-  
+    
   function OnExpand(e) {
     const value = e.currentTarget.getAttribute("value");
     if (value !== expand) {
@@ -42,7 +45,7 @@ export default function Home() {
       <DashStats total={newRequests.length} title="New Requests"/>
       </DashStatsGrid>
       <Dashboard>
-        {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).map(
+        {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).filter(item => team ? item.team === team : item.team ).map(
           (item) => {
             return (
               <TableBody

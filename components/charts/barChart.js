@@ -16,77 +16,84 @@ const BarChart = () => {
       const newData = [
         {
           team: "Accounts",
-          total: data.Items.filter((d) => d.team === "Accounts").length,
+          total: data.Items.filter(d => d.team === "Accounts").length,
         },
         {
           team: "Estates",
-          total: data.Items.filter((d) => d.team === "Estates").length,
+          total: data.Items.filter(d => d.team === "Estates").length,
         },
         {
           team: "HR",
-          total: data.Items.filter((d) => d.team === "HR").length,
+          total: data.Items.filter(d => d.team === "HR").length,
         },
         {
           team: "IT",
-          total: data.Items.filter((d) => d.team === "IT").length,
+          total: data.Items.filter(d => d.team === "IT").length,
         },
         {
           team: "Protocol",
-          total: data.Items.filter((d) => d.team === "Protocol").length,
+          total: data.Items.filter(d => d.team === "Protocol").length,
         },
       ];
       const svg = d3
-        // .select(".chart")
         .select(".svg-chart")
         .call(responsivefy)
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
       svg.selectAll("*").remove();
-      // .append("svg")
-      // .attr("width", width + margin.left + margin.right)
-      // .attr("height", height + margin.top + margin.bottom)
-      // svg.call(responsivefy)
-      // .append("g")
-      // .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
       const yScale = d3
         .scaleLinear()
-        .domain([0, d3.max(newData, (d) => d.total) + 1])
+        .domain([0, d3.max(newData, d => d.total) + 1])
         .range([height, 0]);
-      const yAxis = d3.axisLeft(yScale);
-      svg.call(yAxis);
+
+      const yAxis = svg.append("g").call(d3.axisLeft(yScale).ticks(5));
 
       const xScale = d3
         .scaleBand()
         .padding(0.2)
-        .domain(newData.map((d) => d.team))
+        .domain(newData.map(d => d.team))
         .range([0, width]);
 
       const xAxis = d3.axisBottom(xScale).ticks(5).tickSize(10).tickPadding(5);
       svg.append("g").attr("transform", `translate(0, ${height})`).call(xAxis);
-      //.selectAll("text").style("text-anchor", "end").attr("transform", "rotate(-45)");
 
-      svg
-        .selectAll("rect")
-        .data(newData)
+      const update = svg.selectAll("rect").data(newData);
+
+      update
+        .exit()
+        .transition()
+        .duration(1000)
+        .attr("y", height)
+        .attr("height", 0)
+        .remove();
+
+      yScale.domain([0, d3.max(newData, d => d.total) + 1]);
+      yAxis.transition().duration(1000).call(d3.axisLeft(yScale).ticks(5));
+
+      update
+        .transition(0)
+        .duration(1000)
+        .attr("y", d => yScale(d.total))
+        .attr("height", d => height - yScale(d.total));
+
+      update
         .enter()
+        .append("a")
+          .attr("xlink:href", d => `/?team=${d.team}`
+          )
         .append("rect")
-        .attr("x", (d) => xScale(d.team))
-        .attr("y", (d) => yScale(d.total))
+        .attr("y", height)
+        .attr("height", 0)
+        .attr("x", d => xScale(d.team))
         .attr("width", (d) => xScale.bandwidth())
-        .attr("height", (d) => height - yScale(d.total))
-        .style("fill", "#3B82F6");
-
-      svg
-        .append("text")
-        .attr("x", width / 2)
-        .attr("y", margin.top)
-        .attr("text-anchor", "middle")
-        .attr("fill", "black")
-        .style("font-size", "16px")
-        .style("text-decoration", "underline")
-        .text("Requests Per Team");
+        .style("fill", "#3B82F6")
+        .transition()
+        .duration(1000)
+        .ease(d3.easeBounceOut)
+        .attr("y", d => yScale(d.total))
+        .attr("height", d => height - yScale(d.total))
     }
   }, [data]);
 
@@ -96,7 +103,8 @@ const BarChart = () => {
       {!data ? (
         <div>Loading... </div>
       ) : (
-        <div className="max-w-sm max-h-screen border border-solid border-black bg-white">
+        <div className="max-w-sm max-h-screen bg-white shadow-md hover:shadow-xl rounded pt-4">
+          <h2 className="text-center">Requests Per Team</h2>
           <svg
             className="svg-chart"
             width={width + margin.left + margin.right}
@@ -109,4 +117,3 @@ const BarChart = () => {
 };
 
 export default BarChart;
-

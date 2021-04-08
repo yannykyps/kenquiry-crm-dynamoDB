@@ -99,6 +99,7 @@ export default function Update() {
             onClick={handleModalClick}
             getRef={`Ref No: ${update.id}`}
             text="Request has been updated"
+            success
           />
           <InfoContainer>
             <InfoField
