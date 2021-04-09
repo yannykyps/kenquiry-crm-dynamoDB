@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import * as d3 from "d3";
 import useSWR from "swr";
 import responsivefy from "./responsivefy";
@@ -7,6 +7,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const PieChart = () => {
   const {data, error} = useSWR("/api/request", fetcher);
+  const ref = useRef();
   const margin = 40;
   const width = 384;
   const height = 384;
@@ -14,62 +15,59 @@ const PieChart = () => {
 
   useEffect(() => {
     if (data) {
-        const filterData = data.Items.map((d) => ({
-            team: d.team,
-            total: data.Items.filter((a) => a.team === d.team).length,
-            new: data.Items.filter((a) => a.team === d.team && a.status === "New")
-              .length,
-            furtherAction: data.Items.filter(
-              (a) => a.team === d.team && a.status === "Further Action"
-            ).length,
-            allocated: data.Items.filter(
-              (a) => a.team === d.team && a.status === "Allocated"
-            ).length,
-          }));
-          const newData = [];
-          const map = new Map();
-          for (const item of filterData) {
-            if (!map.has(item.team)) {
-              map.set(item.team, true);
-              newData.push({
-                team: item.team,
-                total: item.total,
-                new: item.new,
-                furtherAction: item.furtherAction,
-                allocated: item.allocated,
-              });
-            }
-          }
+      const filterData = data.Items.map((d) => ({
+        team: d.team,
+        total: data.Items.filter((a) => a.team === d.team).length,
+        new: data.Items.filter((a) => a.team === d.team && a.status === "New")
+          .length,
+        furtherAction: data.Items.filter(
+          (a) => a.team === d.team && a.status === "Further Action"
+        ).length,
+        allocated: data.Items.filter(
+          (a) => a.team === d.team && a.status === "Allocated"
+        ).length,
+      }));
+      const newData = [];
+      const map = new Map();
+      for (const item of filterData) {
+        if (!map.has(item.team)) {
+          map.set(item.team, true);
+          newData.push({
+            team: item.team,
+            total: item.total,
+            new: item.new,
+            furtherAction: item.furtherAction,
+            allocated: item.allocated,
+          });
+        }
+      }
 
       const svg = d3
-        .select(".svg-pie")
+        .select(ref.current)
         .call(responsivefy)
-        .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-      svg.selectAll("*").remove();
+        .select(".chart")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+        svg.selectAll("*").remove();
 
       const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-      const pie = d3.pie().value(function (d) {
-        return d.total;
-      });
+      const pie = d3.pie().value((d) => d.total);
 
       const arcGenerator = d3.arc().innerRadius(0).outerRadius(radius);
 
       const update = svg
         .selectAll("mySlices")
-        .data(pie(newData))
+        .data(pie(newData));
 
-        update
-        .exit()
-        .remove();
+      update.exit().remove();
 
-        update
-        .enter()
-        .append("a")
-          .attr("xlink:href", d => `/?team=${d.data.team}`
-          )
-        .append("path")
+      update
+        .join((enter) =>
+          enter
+            .append("a")
+            .attr("xlink:href", (d) => `/?team=${d.data.team}`)
+            .append("path")
+        )
         .attr("d", arcGenerator)
         .attr("fill", function (d, i) {
           return color(i);
@@ -87,8 +85,7 @@ const PieChart = () => {
       svg
         .selectAll("mySlices")
         .data(pie(newData))
-        .enter()
-        .append("text")
+        .join("text")
         .text(function (d) {
           return d.data.team;
         })
@@ -108,7 +105,9 @@ const PieChart = () => {
       ) : (
         <div className="max-w-sm bg-white shadow-md hover:shadow-xl rounded pt-4">
           <h2 className="text-center">Requests Per Team</h2>
-          <svg className="svg-pie" width={width} height={height} />
+          <svg ref={ref} className="svg-pie" width={width} height={height}>
+            <g className="chart"></g>
+          </svg>
         </div>
       )}
     </>

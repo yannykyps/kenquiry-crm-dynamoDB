@@ -52,10 +52,8 @@ const BarChart = () => {
     const svg = d3
       .select(ref.current)
       .call(responsivefy)
-      // .append("g")
       .select(".chart")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
-    // svg.selectAll("*").remove();
 
     const yScale = d3
       .scaleLinear()
@@ -63,31 +61,23 @@ const BarChart = () => {
       .range([height, 0]);
 
     const yAxis = svg.select(".y-axis").call(d3.axisLeft(yScale).ticks(5));
-    // append("g")
     const xScale = d3
       .scaleBand()
       .padding(0.2)
       .domain(newData.map((d) => d.team))
       .range([0, width]);
 
-    // const xAxis = d3.axisBottom(xScale).ticks(5).tickSize(10).tickPadding(5);
     svg
       .select(".x-axis")
       .attr("transform", `translate(0, ${height})`)
       .call(d3.axisBottom(xScale).ticks(5).tickSize(10).tickPadding(5));
 
     const update = svg.selectAll("rect").data(newData);
-    // data(
-    //   newData.filter((d) => d[isStatus]),
-    //   (d) => d.team
 
     yScale.domain([0, d3.max(newData, (d) => d.total) + 1]);
     yAxis.transition().duration(1000).call(d3.axisLeft(yScale).ticks(5));
 
     update
-      // .enter()
-      // .select(".link")
-      // .append("a")
       .join(
         (enter) =>
           enter
