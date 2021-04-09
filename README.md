@@ -11,6 +11,7 @@
 - Next
 - DynamoDB
 - TailwindCSS
+- D3.js
 
 ## Useful commands
 
