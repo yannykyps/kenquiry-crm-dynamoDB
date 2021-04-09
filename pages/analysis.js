@@ -1,5 +1,3 @@
-import Chart from "../components/charts/chart";
-import ChartVis from "../components/charts/chartVis";
 import BarChart from "../components/charts/barChart";
 import Layout from "../components/layout";
 import SEO from "../components/SEO";

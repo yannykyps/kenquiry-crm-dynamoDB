@@ -8,34 +8,38 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 const PieChart = () => {
   const {data, error} = useSWR("/api/request", fetcher);
   const margin = 40;
-  const width = 450;
-  const height = 450;
+  const width = 384;
+  const height = 384;
   const radius = Math.min(width, height) / 2 - margin;
 
   useEffect(() => {
     if (data) {
-      const newData = [
-        {
-          team: "Accounts",
-          total: data.Items.filter(d => d.team === "Accounts").length,
-        },
-        {
-          team: "Estates",
-          total: data.Items.filter(d => d.team === "Estates").length,
-        },
-        {
-          team: "HR",
-          total: data.Items.filter(d => d.team === "HR").length,
-        },
-        {
-          team: "IT",
-          total: data.Items.filter(d => d.team === "IT").length,
-        },
-        {
-          team: "Protocol",
-          total: data.Items.filter(d => d.team === "Protocol").length,
-        },
-      ];
+        const filterData = data.Items.map((d) => ({
+            team: d.team,
+            total: data.Items.filter((a) => a.team === d.team).length,
+            new: data.Items.filter((a) => a.team === d.team && a.status === "New")
+              .length,
+            furtherAction: data.Items.filter(
+              (a) => a.team === d.team && a.status === "Further Action"
+            ).length,
+            allocated: data.Items.filter(
+              (a) => a.team === d.team && a.status === "Allocated"
+            ).length,
+          }));
+          const newData = [];
+          const map = new Map();
+          for (const item of filterData) {
+            if (!map.has(item.team)) {
+              map.set(item.team, true);
+              newData.push({
+                team: item.team,
+                total: item.total,
+                new: item.new,
+                furtherAction: item.furtherAction,
+                allocated: item.allocated,
+              });
+            }
+          }
 
       const svg = d3
         .select(".svg-pie")
@@ -52,10 +56,19 @@ const PieChart = () => {
 
       const arcGenerator = d3.arc().innerRadius(0).outerRadius(radius);
 
-      svg
+      const update = svg
         .selectAll("mySlices")
         .data(pie(newData))
+
+        update
+        .exit()
+        .remove();
+
+        update
         .enter()
+        .append("a")
+          .attr("xlink:href", d => `/?team=${d.data.team}`
+          )
         .append("path")
         .attr("d", arcGenerator)
         .attr("fill", function (d, i) {
@@ -63,7 +76,7 @@ const PieChart = () => {
         })
         .attr("stroke", "black")
         .style("stroke-width", "2px")
-        .style("opacity", 0.7)
+        .style("fill-opacity", 0.7)
         .on("mouseover", function (d) {
           d3.select(this).attr("style", "fill-opacity:1;");
         })
@@ -83,7 +96,7 @@ const PieChart = () => {
           return "translate(" + arcGenerator.centroid(d) + ")";
         })
         .style("text-anchor", "middle")
-        .style("font-size", 14);
+        .style("font-size", 12);
     }
   }, [data]);
 
@@ -93,7 +106,7 @@ const PieChart = () => {
       {!data ? (
         <div>Loading... </div>
       ) : (
-        <div className="max-w-sm max-h-screen bg-white shadow-md hover:shadow-xl rounded pt-4">
+        <div className="max-w-sm bg-white shadow-md hover:shadow-xl rounded pt-4">
           <h2 className="text-center">Requests Per Team</h2>
           <svg className="svg-pie" width={width} height={height} />
         </div>

@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, {useState} from "react";
 import Dashboard from "../components/dashboard";
 import Layout from "../components/layout";
 import SEO from "../components/SEO";
@@ -20,8 +20,8 @@ export default function Home() {
   if (error) return <div>Failed to load</div>;
   if (!data) return <Splashscreen />;
   const breach = data.Items.filter((item) => item.dueBy < Date.now());
-  const newRequests = data.Items.filter(item => item.status === "New")
-    
+  const newRequests = data.Items.filter((item) => item.status === "New");
+
   function OnExpand(e) {
     const value = e.currentTarget.getAttribute("value");
     if (value !== expand) {
@@ -35,18 +35,22 @@ export default function Home() {
     <Layout>
       <SEO title="Dashboard" description="Kenquiry CRM dashboard" />
       <Title
-        title="Dashboard"
+        title={`Dashboard ${!team ? "" : team}`}
         subTitle="Dashboard used to monitor all active requests for your team. With authentication added, you can restrict access to show only your teams requests."
-      /> 
+      />
       <DashStatsGrid>
-      <DashStats total={data.Count} title="Total Requests"/>
-      <DashStats total={breach.length} title="Total Breached"/>
-      <DashStats total={`${Math.round((breach.length/data.Count)*100)}%`} title="% Breached"/>
-      <DashStats total={newRequests.length} title="New Requests"/>
+        <DashStats total={data.Items.filter((item) => (team ? item.team === team : item.team)).length} title="Total Requests" />
+        <DashStats total={breach.filter((item) => (team ? item.team === team : item.team)).length} title="Total Breached" />
+        <DashStats
+          total={`${Math.round((breach.filter((item) => (team ? item.team === team : item.team)).length / data.Items.filter((item) => (team ? item.team === team : item.team)).length) * 100)}%`}
+          title="% Breached"
+        />
+        <DashStats total={newRequests.filter((item) => (team ? item.team === team : item.team)).length} title="New Requests" />
       </DashStatsGrid>
       <Dashboard>
-        {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).filter(item => team ? item.team === team : item.team ).map(
-          (item) => {
+        {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy)
+          .filter((item) => (team ? item.team === team : item.team))
+          .map((item) => {
             return (
               <TableBody
                 key={item.id}
@@ -63,8 +67,7 @@ export default function Home() {
                 expand={expand}
               />
             );
-          }
-        )}
+          })}
       </Dashboard>
     </Layout>
   );
