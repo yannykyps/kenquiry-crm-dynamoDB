@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Dashboard from "../components/dashboard";
 import Layout from "../components/layout";
 import SEO from "../components/SEO";
@@ -15,6 +15,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Home() {
   const {data, error} = useSWR("/api/request", fetcher);
   const [expand, setExpand] = useState("");
+  const [filter, setFilter] = useState("total")
   const router = useRouter();
   const {team} = router.query;
   if (error) return <div>Failed to load</div>;
@@ -31,11 +32,13 @@ export default function Home() {
     }
   }
 
+  console.log(filter);
+
   return (
     <Layout>
       <SEO title="Dashboard" description="Kenquiry CRM dashboard" />
       <Title
-        title={`Dashboard ${!team ? "" : team}`}
+        title={`Dashboard ${!team ? "" : team} ${filter}`}
         subTitle="Dashboard used to monitor all active requests for your team. With authentication added, you can restrict access to show only your teams requests."
       />
       <DashStatsGrid>
@@ -45,6 +48,7 @@ export default function Home() {
               .length
           }
           title="Total Requests"
+          onClick={() =>{setFilter("total")}}
         />
         <DashStats
           total={
@@ -52,6 +56,7 @@ export default function Home() {
               .length
           }
           title="Total Breached"
+          onClick={() =>{setFilter("Breached")}}
         />
         <DashStats
           total={`${Math.round(
@@ -63,6 +68,7 @@ export default function Home() {
               100
           )}%`}
           title="% Breached"
+          onClick={() =>{setFilter("Breached")}}
         />
         <DashStats
           total={
@@ -71,11 +77,12 @@ export default function Home() {
             ).length
           }
           title="New Requests"
+          onClick={() =>{setFilter("New")}}
         />
       </DashStatsGrid>
       <Dashboard>
         {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy)
-          .filter((item) => (team ? item.team === team : item.team))
+          .filter((item) => (team ? item.team === team : item.team)).filter((item) => filter === "Breached" ? item.dueBy < Date.now() : filter === "New" ? item.status === "New" : item)
           .map((item) => {
             return (
               <TableBody
