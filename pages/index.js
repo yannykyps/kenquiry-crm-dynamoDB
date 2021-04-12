@@ -39,13 +39,39 @@ export default function Home() {
         subTitle="Dashboard used to monitor all active requests for your team. With authentication added, you can restrict access to show only your teams requests."
       />
       <DashStatsGrid>
-        <DashStats total={data.Items.filter((item) => (team ? item.team === team : item.team)).length} title="Total Requests" />
-        <DashStats total={breach.filter((item) => (team ? item.team === team : item.team)).length} title="Total Breached" />
         <DashStats
-          total={`${Math.round((breach.filter((item) => (team ? item.team === team : item.team)).length / data.Items.filter((item) => (team ? item.team === team : item.team)).length) * 100)}%`}
+          total={
+            data.Items.filter((item) => (team ? item.team === team : item.team))
+              .length
+          }
+          title="Total Requests"
+        />
+        <DashStats
+          total={
+            breach.filter((item) => (team ? item.team === team : item.team))
+              .length
+          }
+          title="Total Breached"
+        />
+        <DashStats
+          total={`${Math.round(
+            (breach.filter((item) => (team ? item.team === team : item.team))
+              .length /
+              data.Items.filter((item) =>
+                team ? item.team === team : item.team
+              ).length) *
+              100
+          )}%`}
           title="% Breached"
         />
-        <DashStats total={newRequests.filter((item) => (team ? item.team === team : item.team)).length} title="New Requests" />
+        <DashStats
+          total={
+            newRequests.filter((item) =>
+              team ? item.team === team : item.team
+            ).length
+          }
+          title="New Requests"
+        />
       </DashStatsGrid>
       <Dashboard>
         {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy)
