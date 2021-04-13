@@ -16,6 +16,10 @@ export default function Form(props) {
 Form.propTypes = {
   action: PropTypes.string.isRequired,
   children: PropTypes.array.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object
+  ]),
   method: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired
 }

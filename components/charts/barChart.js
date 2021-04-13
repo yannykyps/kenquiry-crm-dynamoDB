@@ -82,6 +82,7 @@ export default function BarChart({data}) {
           .attr("class", "fill-current text-blue-500 hover:text-blue-800")
           .attr("y", height)
           .attr("height", 0)
+          .sort()
       )
       .attr("x", (d) => xScale(d.team))
       .attr("width", xScale.bandwidth())

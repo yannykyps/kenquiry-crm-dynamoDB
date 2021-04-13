@@ -20,6 +20,8 @@ return (
       defaultValue={props.defaultValue}
       value={props.value}
       readOnly={props.readOnly}
+      min={props.min}
+      max={props.max}
     />
   </div>
 )
@@ -29,6 +31,8 @@ Input.propTypes = {
   autoComplete: PropTypes.string,
   defaultValue: PropTypes.string,
   label: PropTypes.string.isRequired,
+  max: PropTypes.string,
+  min: PropTypes.string,
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   readOnly: PropTypes.bool,
