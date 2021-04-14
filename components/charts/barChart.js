@@ -1,49 +1,19 @@
 import PropTypes from "prop-types";
-import React, {useState, useEffect, useRef} from "react";
+import React, { useEffect, useRef} from "react";
 import * as d3 from "d3";
 import responsivefy from "./responsivefy";
 import Button from "./button";
 
-export default function BarChart({data}) {
+export default function BarChart(props) {
   const ref = useRef();
-  const [isStatus, setIsStatus] = useState("total");
   const margin = {top: 10, right: 20, bottom: 60, left: 40};
   const width = 384 - margin.left - margin.right;
   const height = 500 - margin.top - margin.bottom;
+  const xScaleProp = props.xScale
+  const xAxisProp = props.xAxis
+  // const yAxisProp = props.yAxis
 
   useEffect(() => {
-    if (data) {
-      draw();
-    }
-  }, [data, isStatus]);
-
-  function draw() {
-    const filterData = data.Items.map((d) => ({
-      team: d.team,
-      total: data.Items.filter((a) => a.team === d.team).length,
-      new: data.Items.filter((a) => a.team === d.team && a.status === "New")
-        .length,
-      furtherAction: data.Items.filter(
-        (a) => a.team === d.team && a.status === "Further Action"
-      ).length,
-      allocated: data.Items.filter(
-        (a) => a.team === d.team && a.status === "Allocated"
-      ).length,
-    }));
-    const newData = [];
-    const map = new Map();
-    for (const item of filterData) {
-      if (!map.has(item.team)) {
-        map.set(item.team, true);
-        newData.push({
-          team: item.team,
-          total: item.total,
-          new: item.new,
-          furtherAction: item.furtherAction,
-          allocated: item.allocated,
-        });
-      }
-    }
     const t = d3.transition(0).duration(1000);
 
     const svg = d3
@@ -54,24 +24,23 @@ export default function BarChart({data}) {
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(newData, (d) => d.total) + 1])
+      // .domain([0, d3.max(props.data, (d) => d.total) + 1])
+      .domain(props.yAxis)
       .range([height, 0]);
     svg.select(".y-axis").call(d3.axisLeft(yScale).ticks(5));
 
     const xScale = d3
       .scaleBand()
       .padding(0.2)
-      .domain(newData.map((d) => d.team).sort())
+      .domain(props.data.map((d) => d[xAxisProp]).sort())
+      // .domain(props.xAxis)
       .range([0, width]);
     svg
       .select(".x-axis")
       .attr("transform", `translate(0, ${height})`)
       .call(d3.axisBottom(xScale).ticks(5).tickSize(10).tickPadding(5));
 
-    const update = svg.selectAll("rect").data(newData);
-
-    // yScale.domain([0, d3.max(newData, (d) => d.total) + 1]);
-    // yAxis.transition().duration(1000).call(d3.axisLeft(yScale).ticks(5));
+    const update = svg.selectAll("rect").data(props.data);
 
     update
       .join((enter) =>
@@ -84,17 +53,18 @@ export default function BarChart({data}) {
           .attr("height", 0)
           .sort()
       )
-      .attr("x", (d) => xScale(d.team))
+      .attr("x", (d) => xScale(d[xScaleProp]))
+      // .attr("x", props.xScale)
       .attr("width", xScale.bandwidth())
       .transition(t)
-      .attr("y", (d) => yScale(d[isStatus]))
-      .attr("height", (d) => height - yScale(d[isStatus]));
-  }
+      .attr("y", (d) => yScale(props.filter ? d[props.filter] : d.total))
+      .attr("height", (d) => height - yScale(props.filter ? d[props.filter] : d.total));
+  }, [props.data]);
 
   return (
     <div className="max-w-sm bg-white shadow-md hover:shadow-xl rounded pt-4">
       <h2 className="text-center capitalize">
-        {isStatus.replace(/([A-Z])/g, " $1").trim()} Requests Per Team
+        {props.filter && props.filter.replace(/([A-Z])/g, " $1").trim()} {props.title}
       </h2>
       <svg
         ref={ref}
@@ -107,32 +77,25 @@ export default function BarChart({data}) {
           <g className="y-axis" />
         </g>
       </svg>
-      <div className="text-center">
-        <Button
-          onClick={(e) => setIsStatus(e.target.value)}
-          value="total"
-          label="Total"
-        />
-        <Button
-          onClick={(e) => setIsStatus(e.target.value)}
-          value="new"
-          label="New"
-        />
-        <Button
-          onClick={(e) => setIsStatus(e.target.value)}
-          value="furtherAction"
-          label="Further Action"
-        />
-        <Button
-          onClick={(e) => setIsStatus(e.target.value)}
-          value="allocated"
-          label="Allocated"
-        />
-      </div>
+      <div className="text-center">{props.children}</div>
     </div>
   );
 }
 
+BarChart.Button = (props) => (
+  <Button onClick={props.onClick} value={props.value} label={props.label} />
+);
+
 BarChart.propTypes = {
-  data: PropTypes.object.isRequired,
-};
+  children: PropTypes.array,
+  data: PropTypes.array.isRequired,
+  filter: PropTypes.string,
+  xAxis: PropTypes.string.isRequired,
+  xScale: PropTypes.string.isRequired,
+  /** pass the object name as a STRING that you want to use to map the x scale */
+  yAxis: PropTypes.array.isRequired
+}
+
+
+
+

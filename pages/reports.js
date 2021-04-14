@@ -12,6 +12,7 @@ import Splashscreen from "../components/splashscreen";
 import {Button, Container, Form, Input, Select} from "../components/form";
 import teams from "../components/data/teams";
 import response from "../components/data/responseTimes";
+import BarChart from "../components/charts/barChart";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -85,6 +86,21 @@ export default function ReportsPage() {
     (item) => item.dueBy > item.updates.updatedDate
   );
 
+  const slaChart = [
+    // {
+    //   name: "total",
+    //   total: filteredData.length,
+    // },
+    {
+      name: "yes",
+      total: sla.length,
+    },
+    {
+      name: "no",
+      total: breach.length,
+    },
+  ];
+
   function OnExpand(e) {
     const value = e.currentTarget.getAttribute("value");
     if (value !== expand) {
@@ -115,135 +131,133 @@ export default function ReportsPage() {
         title="Reports"
         subTitle="Use reports to anaylse SLAs, KPIs and any bespoke anaylsis. Sample below is a report showing completed requests with filters."
       />
-      
-      {/* <div className="m-4"></div> */}
       <Container>
-      <Form action="#" method="#" onSubmit={clearFilters}>
-        <Form.Inputs>
-          <Select
-            label="Team"
-            name="team"
-            value={filter.team}
-            onChange={(e) =>
-              setFilter((prevValue) => ({...prevValue, team: e.target.value}))
-            }
-          >
-            <Select.Option value="" label=" -- all team -- " />
-            {teams.map((team) => (
-              <Select.Option
-                key={team.value}
-                value={team.value}
-                label={team.label}
-              />
-            ))}
-          </Select>
-          <Select
-            name="response"
-            label="Response"
-            onChange={(e) =>
-              setFilter((prevValue) => ({
-                ...prevValue,
-                response: e.target.value,
-              }))
-            }
-            value={filter.response}
-          >
-            <Select.Option value="" label=" -- all responses -- " />
-            {response.map((response) => (
-              <Select.Option
-                key={response.value}
-                value={response.value}
-                label={response.label}
-              />
-            ))}
-          </Select>
-          <Select
-            name="sla"
-            label="SLA"
-            onChange={(e) =>
-              setFilter((prevValue) => ({...prevValue, sla: e.target.value}))
-            }
-            value={filter.sla}
-          >
-            <Select.Option value="" label=" -- all SLAs -- " />
-            <Select.Option value="yes" label="Yes" />
-            <Select.Option value="no" label="No" />
-          </Select>
-          <Select
-            name="fullName"
-            label="Customer"
-            onChange={(e) =>
-              setFilter((prevValue) => ({
-                ...prevValue,
-                fullName: e.target.value,
-              }))
-            }
-            value={filter.fullName}
-          >
-            <Select.Option value="" label=" -- all customers -- " />
-            {customer.map((customer, i) => (
-              <Select.Option key={i} value={customer} label={customer} />
-            ))}
-          </Select>
-          <Input
-            name="entryDateFrom"
-            label="Entry Date From"
-            type="date"
-            onChange={(e) =>
-              setFilter((prevValue) => ({
-                ...prevValue,
-                entryDateFrom: e.target.value,
-              }))
-            }
-            value={filter.entryDateFrom}
-            min={moment(Math.min(...entryDate)).format("YYYY-MM-DD")}
-            max={moment(Math.max(...entryDate)).format("YYYY-MM-DD")}
-          />
-          <Input
-            name="entryDateTo"
-            label="Entry Date To"
-            type="date"
-            onChange={(e) =>
-              setFilter((prevValue) => ({
-                ...prevValue,
-                entryDateTo: e.target.value,
-              }))
-            }
-            value={filter.entryDateTo}
-            min={moment(Math.min(...entryDate)).format("YYYY-MM-DD")}
-          />
-          <Input
-            name="completedDateFrom"
-            label="Completed Date From"
-            type="date"
-            onChange={(e) =>
-              setFilter((prevValue) => ({
-                ...prevValue,
-                completedDateFrom: e.target.value,
-              }))
-            }
-            value={filter.completedDateFrom}
-            min={moment(Math.min(...completedDate)).format("YYYY-MM-DD")}
-            max={moment(Math.max(...completedDate)).format("YYYY-MM-DD")}
-          />
-          <Input
-            name="completedDateTo"
-            label="Completed Date To"
-            type="date"
-            onChange={(e) =>
-              setFilter((prevValue) => ({
-                ...prevValue,
-                completedDateTo: e.target.value,
-              }))
-            }
-            value={filter.completedDateTo}
-            min={moment(Math.min(...completedDate)).format("YYYY-MM-DD")}
-          />
-        </Form.Inputs>
-        <Form.Button>
-          <Button type="submit" label="Clear Filter" />
-        </Form.Button>
-      </Form>
+        <Form action="#" method="#" onSubmit={clearFilters}>
+          <Form.Inputs>
+            <Select
+              label="Team"
+              name="team"
+              value={filter.team}
+              onChange={(e) =>
+                setFilter((prevValue) => ({...prevValue, team: e.target.value}))
+              }
+            >
+              <Select.Option value="" label=" -- all teams -- " />
+              {teams.map((team) => (
+                <Select.Option
+                  key={team.value}
+                  value={team.value}
+                  label={team.label}
+                />
+              ))}
+            </Select>
+            <Select
+              name="response"
+              label="Response"
+              onChange={(e) =>
+                setFilter((prevValue) => ({
+                  ...prevValue,
+                  response: e.target.value,
+                }))
+              }
+              value={filter.response}
+            >
+              <Select.Option value="" label=" -- all responses -- " />
+              {response.map((response) => (
+                <Select.Option
+                  key={response.value}
+                  value={response.value}
+                  label={response.label}
+                />
+              ))}
+            </Select>
+            <Select
+              name="sla"
+              label="SLA"
+              onChange={(e) =>
+                setFilter((prevValue) => ({...prevValue, sla: e.target.value}))
+              }
+              value={filter.sla}
+            >
+              <Select.Option value="" label=" -- all SLAs -- " />
+              <Select.Option value="yes" label="Yes" />
+              <Select.Option value="no" label="No" />
+            </Select>
+            <Select
+              name="fullName"
+              label="Customer"
+              onChange={(e) =>
+                setFilter((prevValue) => ({
+                  ...prevValue,
+                  fullName: e.target.value,
+                }))
+              }
+              value={filter.fullName}
+            >
+              <Select.Option value="" label=" -- all customers -- " />
+              {customer.map((customer, i) => (
+                <Select.Option key={i} value={customer} label={customer} />
+              ))}
+            </Select>
+            <Input
+              name="entryDateFrom"
+              label="Entry Date From"
+              type="date"
+              onChange={(e) =>
+                setFilter((prevValue) => ({
+                  ...prevValue,
+                  entryDateFrom: e.target.value,
+                }))
+              }
+              value={filter.entryDateFrom}
+              min={moment(Math.min(...entryDate)).format("YYYY-MM-DD")}
+              max={moment(Math.max(...entryDate)).format("YYYY-MM-DD")}
+            />
+            <Input
+              name="entryDateTo"
+              label="Entry Date To"
+              type="date"
+              onChange={(e) =>
+                setFilter((prevValue) => ({
+                  ...prevValue,
+                  entryDateTo: e.target.value,
+                }))
+              }
+              value={filter.entryDateTo}
+              min={moment(Math.min(...entryDate)).format("YYYY-MM-DD")}
+            />
+            <Input
+              name="completedDateFrom"
+              label="Completed Date From"
+              type="date"
+              onChange={(e) =>
+                setFilter((prevValue) => ({
+                  ...prevValue,
+                  completedDateFrom: e.target.value,
+                }))
+              }
+              value={filter.completedDateFrom}
+              min={moment(Math.min(...completedDate)).format("YYYY-MM-DD")}
+              max={moment(Math.max(...completedDate)).format("YYYY-MM-DD")}
+            />
+            <Input
+              name="completedDateTo"
+              label="Completed Date To"
+              type="date"
+              onChange={(e) =>
+                setFilter((prevValue) => ({
+                  ...prevValue,
+                  completedDateTo: e.target.value,
+                }))
+              }
+              value={filter.completedDateTo}
+              min={moment(Math.min(...completedDate)).format("YYYY-MM-DD")}
+            />
+          </Form.Inputs>
+          <Form.Button>
+            <Button type="submit" label="Clear Filter" />
+          </Form.Button>
+        </Form>
       </Container>
       <DashStatsGrid>
         <DashStats total={filteredData.length} title="Total Complete" />
@@ -277,6 +291,13 @@ export default function ReportsPage() {
           );
         })}
       </Dashboard>
+      <BarChart
+        data={slaChart}
+        title="SLA Stats"
+        xAxis={"name"}
+        yAxis={[0, filteredData.length]}
+        xScale={"name"}
+      />
     </Layout>
   );
 }

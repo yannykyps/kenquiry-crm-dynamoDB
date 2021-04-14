@@ -11,68 +11,50 @@ export default function PieChart({data}) {
   const radius = Math.min(width, height) / 2 - margin;
 
   useEffect(() => {
-    if (data) {
-      const filterData = data.Items.map((d) => ({
-        team: d.team,
-        total: data.Items.filter((a) => a.team === d.team).length,
-      }));
-      const newData = [];
-      const map = new Map();
-      for (const item of filterData) {
-        if (!map.has(item.team)) {
-          map.set(item.team, true);
-          newData.push({
-            team: item.team,
-            total: item.total,
-          });
-        }
-      }
+    const svg = d3
+      .select(ref.current)
+      .call(responsivefy)
+      .select(".chart")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    svg.selectAll("*").remove();
 
-      const svg = d3
-        .select(ref.current)
-        .call(responsivefy)
-        .select(".chart")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-      svg.selectAll("*").remove();
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const pie = d3.pie().value((d) => d.total);
+    const arcGenerator = d3.arc().innerRadius(0).outerRadius(radius);
+    const update = svg.selectAll("mySlices").data(pie(data));
 
-      const color = d3.scaleOrdinal(d3.schemeCategory10);
-      const pie = d3.pie().value((d) => d.total);
-      const arcGenerator = d3.arc().innerRadius(0).outerRadius(radius);
-      const update = svg.selectAll("mySlices").data(pie(newData));
+    update
+      .join((enter) =>
+        enter
+          .append("a")
+          .attr("xlink:href", (d) => `/?team=${d.data.team}`)
+          .append("path")
+          .attr("class", "stroke-current text-black stroke-2")
+          .style("fill-opacity", 0.7)
+      )
+      .attr("d", arcGenerator)
+      .attr("fill", function (d, i) {
+        return color(i);
+      })
+      .on("mouseover", function (d) {
+        d3.select(this).attr("style", "fill-opacity:1;");
+      })
+      .on("mouseout", function () {
+        d3.select(this).attr("style", "fill-opacity:0.7;");
+      });
 
-      update
-        .join((enter) =>
-          enter
-            .append("a")
-            .attr("xlink:href", (d) => `/?team=${d.data.team}`)
-            .append("path")
-            .attr("class", "stroke-current text-black stroke-2")
-            .style("fill-opacity", 0.7)
-        )
-        .attr("d", arcGenerator)
-        .attr("fill", function (d, i) {
-          return color(i);
-        })
-        .on("mouseover", function (d) {
-          d3.select(this).attr("style", "fill-opacity:1;");
-        })
-        .on("mouseout", function () {
-          d3.select(this).attr("style", "fill-opacity:0.7;");
-        });
-
-      svg
-        .selectAll("mySlices")
-        .data(pie(newData))
-        .join("text")
-        .text(function (d) {
-          return d.data.team;
-        })
-        .attr("transform", function (d) {
-          return "translate(" + arcGenerator.centroid(d) + ")";
-        })
-        .attr("class", "text-xs text-left")
-        .attr("text-anchor", "middle");
-    }
+    svg
+      .selectAll("mySlices")
+      .data(pie(data))
+      .join("text")
+      .text(function (d) {
+        return d.data.team;
+      })
+      .attr("transform", function (d) {
+        return "translate(" + arcGenerator.centroid(d) + ")";
+      })
+      .attr("class", "text-xs text-left")
+      .attr("text-anchor", "middle");
   }, [data]);
 
   return (
@@ -86,5 +68,5 @@ export default function PieChart({data}) {
 }
 
 PieChart.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
 };

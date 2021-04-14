@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React from "react";
 import {arc} from "d3-shape";
 import {scaleLinear} from "d3-scale";
@@ -49,7 +50,7 @@ export default function Gauge({value, label}) {
           >
             {gradientSteps.map((color, index) => (
               <stop
-                key={color}
+                key={index}
                 stopColor={color}
                 offset={`${index / (gradientSteps.length - 1)}`}
               />
@@ -84,6 +85,11 @@ export default function Gauge({value, label}) {
       )}
     </div>
   );
+}
+
+Gauge.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired
 }
 
 const getCoordsOnArc = (angle, offset = 10) => [
