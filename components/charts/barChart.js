@@ -6,12 +6,10 @@ import Button from "./button";
 
 export default function BarChart(props) {
   const ref = useRef();
-  const margin = {top: 10, right: 20, bottom: 60, left: 40};
-  const width = 384 - margin.left - margin.right;
-  const height = 500 - margin.top - margin.bottom;
-  const xScaleProp = props.xScale
-  const xAxisProp = props.xAxis
-  // const yAxisProp = props.yAxis
+  // const margin = {top: 10, right: 20, bottom: 60, left: 40};
+  const margin = props.margin;
+  const width = props.width - margin.left - margin.right;
+  const height = props.height - margin.top - margin.bottom;
 
   useEffect(() => {
     const t = d3.transition(0).duration(1000);
@@ -32,7 +30,7 @@ export default function BarChart(props) {
     const xScale = d3
       .scaleBand()
       .padding(0.2)
-      .domain(props.data.map((d) => d[xAxisProp]).sort())
+      .domain(props.data.map((d) => d[props.xAxis]).sort())
       // .domain(props.xAxis)
       .range([0, width]);
     svg
@@ -42,7 +40,8 @@ export default function BarChart(props) {
 
     const update = svg.selectAll("rect").data(props.data);
 
-    update
+    if (props.xScale === "team") {
+      update
       .join((enter) =>
         enter
           .append("a")
@@ -53,16 +52,33 @@ export default function BarChart(props) {
           .attr("height", 0)
           .sort()
       )
-      .attr("x", (d) => xScale(d[xScaleProp]))
+      .attr("x", (d) => xScale(d[props.xScale]))
       // .attr("x", props.xScale)
       .attr("width", xScale.bandwidth())
       .transition(t)
       .attr("y", (d) => yScale(props.filter ? d[props.filter] : d.total))
       .attr("height", (d) => height - yScale(props.filter ? d[props.filter] : d.total));
+    } else {
+      update
+      .join((enter) =>
+        enter
+          .append("rect")
+          .attr("class", "fill-current text-blue-500 hover:text-blue-800")
+          .attr("y", height)
+          .attr("height", 0)
+          .sort()
+      )
+      .attr("x", (d) => xScale(d[props.xScale]))
+      // .attr("x", props.xScale)
+      .attr("width", xScale.bandwidth())
+      .transition(t)
+      .attr("y", (d) => yScale(props.filter ? d[props.filter] : d.total))
+      .attr("height", (d) => height - yScale(props.filter ? d[props.filter] : d.total));
+    } 
   }, [props.data]);
 
   return (
-    <div className="max-w-sm bg-white shadow-md hover:shadow-xl rounded pt-4">
+    <div className="w-max bg-white shadow-md hover:shadow-xl rounded pt-4">
       <h2 className="text-center capitalize">
         {props.filter && props.filter.replace(/([A-Z])/g, " $1").trim()} {props.title}
       </h2>
@@ -71,9 +87,10 @@ export default function BarChart(props) {
         className="svg-chart"
         width={width + margin.left + margin.right}
         height={height + margin.top + margin.bottom}
+        // viewBox={`0 0 ${props.width} ${props.height}`}
       >
         <g className="chart">
-          <g className="x-axis" />
+          <g className="x-axis capitalize" />
           <g className="y-axis" />
         </g>
       </svg>
@@ -90,10 +107,20 @@ BarChart.propTypes = {
   children: PropTypes.array,
   data: PropTypes.array.isRequired,
   filter: PropTypes.string,
+  height: PropTypes.number.isRequired,
+  margin: PropTypes.shape({
+    bottom: PropTypes.number.isRequired,
+    left: PropTypes.number.isRequired,
+    right: PropTypes.number.isRequired,
+    top: PropTypes.number.isRequired
+  }),
+  title: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
   xAxis: PropTypes.string.isRequired,
-  xScale: PropTypes.string.isRequired,
-  /** pass the object name as a STRING that you want to use to map the x scale */
-  yAxis: PropTypes.array.isRequired
+  xScale: PropTypes.string.isRequired, //* pass the object name as a STRING that you want to use to map the x scale 
+  yAxis: PropTypes.arrayOf(
+    PropTypes.number.isRequired,
+  )
 }
 
 

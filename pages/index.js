@@ -32,8 +32,6 @@ export default function Home() {
     }
   }
 
-  console.log(filter);
-
   return (
     <Layout>
       <SEO title="Dashboard" description="Kenquiry CRM dashboard" />

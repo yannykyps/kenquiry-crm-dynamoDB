@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import {Transition} from "@headlessui/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
+import links from "./data/links"
+import profile from "./data/profile"
 
 export default function Navbar() {
   const [isOpenProfile, setIsOpenProfile] = useState(false);
@@ -86,42 +88,17 @@ export default function Navbar() {
             <div className="hidden sm:block sm:ml-6">
               <div className="flex space-x-4">
                 {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                <Link href="/">
+                {links.map((link, i) => ( 
+                  <Link key={i} href={link.url}>
                   <a
                     className={`${
-                      router.pathname === "/" ? active : inactive
+                      router.pathname === link.url ? active : inactive
                     } px-3 py-2 rounded-md text-sm font-medium`}
                   >
-                    Dashboard
+                    {link.label}
                   </a>
                 </Link>
-                <Link href="/teams">
-                  <a
-                    className={`${
-                      router.pathname === "/teams" ? active : inactive
-                    } px-3 py-2 rounded-md text-sm font-medium`}
-                  >
-                    Teams
-                  </a>
-                </Link>
-                <Link href="/reports">
-                  <a
-                    className={`${
-                      router.pathname === "/reports" ? active : inactive
-                    } px-3 py-2 rounded-md text-sm font-medium`}
-                  >
-                    Reports
-                  </a>
-                </Link>
-                <Link href="/analysis">
-                  <a
-                    className={`${
-                      router.pathname === "/analysis" ? active : inactive
-                    } px-3 py-2 rounded-md text-sm font-medium`}
-                  >
-                    Analysis
-                  </a>
-                </Link>
+                ))}
               </div>
             </div>
           </div>
@@ -189,75 +166,38 @@ export default function Navbar() {
                   aria-orientation="vertical"
                   aria-labelledby="user-menu"
                 >
-                  <Link href="/">
+                {profile.map((link, i) => (
+                  <Link key={i} href={link.url}>
                     <a
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       role="menuitem"
                       onClick={() => setIsOpenProfile(!isOpenProfile)}
                     >
-                      Your Profile
+                      {link.label}
                     </a>
                   </Link>
-                  <Link href="/">
-                    <a
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
-                      onClick={() => setIsOpenProfile(!isOpenProfile)}
-                    >
-                      Settings
-                    </a>
-                  </Link>
-                  <Link href="/">
-                    <a
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
-                      onClick={() => setIsOpenProfile(!isOpenProfile)}
-                    >
-                      Sign out
-                    </a>
-                  </Link>
+                ))}
                 </div>
               </Transition>
             </div>
           </div>
         </div>
       </div>
-
       {/* <!-- Mobile menu, show/hide based on menu state. --> */}
-
       <div
         className={`sm:hidden ${isOpenMenu ? "block" : "hidden"}`}
         id="mobile-menu"
       >
         <div className="px-2 pt-2 pb-3 space-y-1">
-          <Link href="/">
+        {links.map((link, i) => (
+          <Link key={i} href={link.url}>
             <a className={`${
-                      router.pathname === "/" ? active : inactive
+                      router.pathname === link.url ? active : inactive
                     } block px-3 py-2 rounded-md text-base font-medium`}>
-              Dashboard
+              {link.label}
             </a>
           </Link>
-          <Link href="/teams">
-            <a className={`${
-                      router.pathname === "/teams" ? active : inactive
-                    } block px-3 py-2 rounded-md text-base font-medium`}>
-              Teams
-            </a>
-          </Link>
-          <Link href="/reports">
-            <a className={`${
-                      router.pathname === "/reports" ? active : inactive
-                    } block px-3 py-2 rounded-md text-base font-medium`}>
-              Reports
-            </a>
-          </Link>
-          <Link href="/analysis">
-            <a className={`${
-                      router.pathname === "/analysis" ? active : inactive
-                    } block px-3 py-2 rounded-md text-base font-medium`}>
-              Analysis
-            </a>
-          </Link>
+        ))}
           <Link href="/request">
               <a className="block text-gray-300 bg-indigo-500 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium mr-2" role="menuitem">
                 + Request

@@ -297,7 +297,11 @@ export default function ReportsPage() {
         xAxis={"name"}
         yAxis={[0, filteredData.length]}
         xScale={"name"}
+        width={200}
+        height={200}
+        margin={{top: 10, right: 20, bottom: 30, left: 30}}
       />
+      <div className="my-8"></div>
     </Layout>
   );
 }

@@ -74,7 +74,7 @@ export default function AnalysisPage() {
             label="% Breached"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 md:justify-items-center my-8 gap-y-8">
-          <BarChart data={chartData} title="Requests Per Team" filter={isStatus} xAxis={"team"} yAxis={[0, d3.max(chartData, (d) => d.total) + 1]} xScale={"team"}>
+          <BarChart data={chartData} title="Requests Per Team" filter={isStatus} xAxis={"team"} yAxis={[0, d3.max(chartData, (d) => d.total) + 1]} xScale={"team"} width={384} height={500} margin={{top: 10, right: 20, bottom: 60, left: 40}}>
             <BarChart.Button
               label="Total"
               value="total"
