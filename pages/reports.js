@@ -258,7 +258,7 @@ export default function ReportsPage() {
         </Form>
       </Container>
       <DashStatsGrid>
-        <DashStats total={filteredData.length} title="Total Complete" />
+        <DashStats total={filteredData.length} title="Completed" />
         <DashStats total={sla.length} title="SLA Met" />
         <DashStats total={breach.length} title="SLA Not Met" />
         <DashStats
