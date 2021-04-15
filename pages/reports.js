@@ -1,14 +1,16 @@
 import React, {useState} from "react";
-import Layout from "../components/layout";
-import SEO from "../components/SEO";
-import Title from "../components/title";
+import {
+  Layout,
+  SEO,
+  Title,
+  Dashboard,
+  DashStatsGrid,
+  DashStats,
+  Splashscreen,
+} from "../components";
 import useSWR from "swr";
 import moment from "moment";
-import Dashboard from "../components/dashboard";
 import TableBody from "../components/table/tableBody";
-import DashStatsGrid from "../components/dashStatsGrid";
-import DashStats from "../components/dashStats";
-import Splashscreen from "../components/splashscreen";
 import {Button, Container, Form, Input, Select} from "../components/form";
 import teams from "../components/data/teams";
 import response from "../components/data/responseTimes";
@@ -87,10 +89,6 @@ export default function ReportsPage() {
   );
 
   const slaChart = [
-    // {
-    //   name: "total",
-    //   total: filteredData.length,
-    // },
     {
       name: "yes",
       total: sla.length,
@@ -129,7 +127,7 @@ export default function ReportsPage() {
       <SEO title="Reports" />
       <Title
         title="Reports"
-        subTitle="Use reports to anaylse SLAs, KPIs and any bespoke anaylsis. Sample below is a report showing completed requests with filters."
+        subTitle="Use reports to anaylse SLAs, KPIs and any bespoke anaylsis. Sample below is a report showing completed requests with filters and charts."
       />
       <Container>
         <Form action="#" method="#" onSubmit={clearFilters}>
@@ -291,17 +289,17 @@ export default function ReportsPage() {
           );
         })}
       </Dashboard>
+      <div className="mx-8 mb-8 flex justify-center">
       <BarChart
         data={slaChart}
         title="SLA Stats"
         xAxis={"name"}
         yAxis={[0, filteredData.length]}
-        xScale={"name"}
         width={200}
         height={200}
         margin={{top: 10, right: 20, bottom: 30, left: 30}}
       />
-      <div className="my-8"></div>
+      </div>
     </Layout>
   );
 }

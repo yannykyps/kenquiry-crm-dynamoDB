@@ -6,7 +6,6 @@ import Button from "./button";
 
 export default function BarChart(props) {
   const ref = useRef();
-  // const margin = {top: 10, right: 20, bottom: 60, left: 40};
   const margin = props.margin;
   const width = props.width - margin.left - margin.right;
   const height = props.height - margin.top - margin.bottom;
@@ -40,7 +39,7 @@ export default function BarChart(props) {
 
     const update = svg.selectAll("rect").data(props.data);
 
-    if (props.xScale === "team") {
+    if (props.xAxis === "team") {
       update
       .join((enter) =>
         enter
@@ -52,7 +51,7 @@ export default function BarChart(props) {
           .attr("height", 0)
           .sort()
       )
-      .attr("x", (d) => xScale(d[props.xScale]))
+      .attr("x", (d) => xScale(d[props.xAxis]))
       // .attr("x", props.xScale)
       .attr("width", xScale.bandwidth())
       .transition(t)
@@ -68,7 +67,7 @@ export default function BarChart(props) {
           .attr("height", 0)
           .sort()
       )
-      .attr("x", (d) => xScale(d[props.xScale]))
+      .attr("x", (d) => xScale(d[props.xAxis]))
       // .attr("x", props.xScale)
       .attr("width", xScale.bandwidth())
       .transition(t)
@@ -117,7 +116,7 @@ BarChart.propTypes = {
   title: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   xAxis: PropTypes.string.isRequired,
-  xScale: PropTypes.string.isRequired, //* pass the object name as a STRING that you want to use to map the x scale 
+ //* pass the object name as a STRING that you want to use to map the x scale 
   yAxis: PropTypes.arrayOf(
     PropTypes.number.isRequired,
   )

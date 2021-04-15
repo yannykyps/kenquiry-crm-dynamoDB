@@ -1,10 +1,12 @@
-import Complete from "../components/complete";
-import Layout from "../components/layout";
-import SEO from "../components/SEO";
-import Title from "../components/title";
+import {
+  Layout,
+  SEO,
+  Title,
+  Complete,
+  Splashscreen,
+} from "../components";
 import useSWR from "swr";
 import {useRouter} from "next/router";
-import Splashscreen from "../components/splashscreen";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 

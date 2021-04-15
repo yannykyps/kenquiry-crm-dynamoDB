@@ -1,13 +1,10 @@
 import BarChart from "../components/charts/barChart";
-import Layout from "../components/layout";
-import SEO from "../components/SEO";
-import Title from "../components/title";
+import {Layout, SEO, Title} from "../components"
 import PieChart from "../components/charts/pieChart";
 import useSWR from "swr";
 import Splashscreen from "../components/splashscreen";
 import Gauge from "../components/charts/gauge";
-import React, {useState, useEffect, useRef} from "react";
-import * as d3 from "d3";
+import React, {useState, useEffect} from "react";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -16,6 +13,7 @@ export default function AnalysisPage() {
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isStatus, setIsStatus] = useState("total");
+  const [max, setMax] = useState()
 
   useEffect(() => {
     if (data) {
@@ -46,11 +44,11 @@ export default function AnalysisPage() {
         }
       }
       setChartData(newData);
+      setMax(newData.reduce((prev, cur) => (prev.total > cur.total) ? prev : cur).total)
       setLoading(false);
     }
   }, [data, isStatus]);
 
-  
   return (
     <Layout>
       <SEO title="Analysis" />
@@ -74,29 +72,38 @@ export default function AnalysisPage() {
             label="% Breached"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 md:justify-items-center my-8 gap-y-8">
-          <BarChart data={chartData} title="Requests Per Team" filter={isStatus} xAxis={"team"} yAxis={[0, d3.max(chartData, (d) => d.total) + 1]} xScale={"team"} width={384} height={500} margin={{top: 10, right: 20, bottom: 60, left: 40}}>
-            <BarChart.Button
-              label="Total"
-              value="total"
-              onClick={(e) => setIsStatus(e.target.value)}
-            />
-            <BarChart.Button
-              label="New"
-              value="new"
-              onClick={(e) => setIsStatus(e.target.value)}
-            />
-            <BarChart.Button
-              label="Further Action"
-              value="furtherAction"
-              onClick={(e) => setIsStatus(e.target.value)}
-            />
-            <BarChart.Button
-              label="Allocated"
-              value="allocated"
-              onClick={(e) => setIsStatus(e.target.value)}
-            />
-          </BarChart>
-          <PieChart data={chartData} />
+            <BarChart
+              data={chartData}
+              title="Requests Per Team"
+              filter={isStatus}
+              xAxis={"team"}
+              yAxis={[0, max + 1]}
+              width={384}
+              height={500}
+              margin={{top: 10, right: 20, bottom: 60, left: 40}}
+            >
+              <BarChart.Button
+                label="Total"
+                value="total"
+                onClick={(e) => setIsStatus(e.target.value)}
+              />
+              <BarChart.Button
+                label="New"
+                value="new"
+                onClick={(e) => setIsStatus(e.target.value)}
+              />
+              <BarChart.Button
+                label="Further Action"
+                value="furtherAction"
+                onClick={(e) => setIsStatus(e.target.value)}
+              />
+              <BarChart.Button
+                label="Allocated"
+                value="allocated"
+                onClick={(e) => setIsStatus(e.target.value)}
+              />
+            </BarChart>
+            <PieChart data={chartData} />
           </div>
         </div>
       )}

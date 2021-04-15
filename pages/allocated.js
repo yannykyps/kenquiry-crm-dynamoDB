@@ -1,14 +1,16 @@
 import React, {useState} from "react";
-import Layout from "../components/layout";
-import SEO from "../components/SEO";
-import Title from "../components/title";
+import {
+  Layout,
+  SEO,
+  Title,
+  Dashboard,
+  DashStatsGrid,
+  DashStats,
+  Splashscreen,
+} from "../components";
 import {useRouter} from "next/router";
 import useSWR from "swr";
 import TableBody from "../components/table/tableBody";
-import Dashboard from "../components/dashboard";
-import DashStats from "../components/dashStats";
-import DashStatsGrid from "../components/dashStatsGrid";
-import Splashscreen from "../components/splashscreen";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 

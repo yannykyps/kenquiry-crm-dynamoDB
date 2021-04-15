@@ -1,8 +1,10 @@
 import React from "react";
-import Layout from "../components/layout";
-import SEO from "../components/SEO";
-import Title from "../components/title";
-import Update from "../components/update";
+import {
+  Layout,
+  SEO,
+  Title,
+  Update
+} from "../components";
 import {useRouter} from "next/router";
 
 export default function UpdatePage() {

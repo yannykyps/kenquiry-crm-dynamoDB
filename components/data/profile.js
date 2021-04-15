@@ -1,7 +1,7 @@
 const profile = [
     {
         label: "Your Profile",
-        url: "/"
+        url: "./profile"
     },
     {
         label: "Settings",

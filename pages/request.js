@@ -1,7 +1,9 @@
-import Layout from "../components/layout";
-import Request from "../components/request";
-import SEO from "../components/SEO";
-import Title from "../components/title";
+import {
+  Layout,
+  SEO,
+  Title,
+  Request
+} from "../components";
 
 export default function RequestPage() {
   return (

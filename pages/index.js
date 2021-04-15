@@ -1,13 +1,15 @@
-import React, {useState, useEffect} from "react";
-import Dashboard from "../components/dashboard";
-import Layout from "../components/layout";
-import SEO from "../components/SEO";
-import Title from "../components/title";
+import React, {useState} from "react";
+import {
+  Layout,
+  SEO,
+  Title,
+  Dashboard,
+  DashStatsGrid,
+  DashStats,
+  Splashscreen,
+} from "../components";
 import useSWR from "swr";
 import TableBody from "../components/table/tableBody";
-import DashStats from "../components/dashStats";
-import DashStatsGrid from "../components/dashStatsGrid";
-import Splashscreen from "../components/splashscreen";
 import {useRouter} from "next/router";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
@@ -15,7 +17,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Home() {
   const {data, error} = useSWR("/api/request", fetcher);
   const [expand, setExpand] = useState("");
-  const [filter, setFilter] = useState("total")
+  const [filter, setFilter] = useState("total");
   const router = useRouter();
   const {team} = router.query;
   if (error) return <div>Failed to load</div>;
@@ -46,7 +48,9 @@ export default function Home() {
               .length
           }
           title="Total Requests"
-          onClick={() =>{setFilter("total")}}
+          onClick={() => {
+            setFilter("total");
+          }}
         />
         <DashStats
           total={
@@ -54,7 +58,9 @@ export default function Home() {
               .length
           }
           title="Total Breached"
-          onClick={() =>{setFilter("Breached")}}
+          onClick={() => {
+            setFilter("Breached");
+          }}
         />
         <DashStats
           total={`${Math.round(
@@ -66,7 +72,9 @@ export default function Home() {
               100
           )}%`}
           title="% Breached"
-          onClick={() =>{setFilter("Breached")}}
+          onClick={() => {
+            setFilter("Breached");
+          }}
         />
         <DashStats
           total={
@@ -75,12 +83,21 @@ export default function Home() {
             ).length
           }
           title="New Requests"
-          onClick={() =>{setFilter("New")}}
+          onClick={() => {
+            setFilter("New");
+          }}
         />
       </DashStatsGrid>
       <Dashboard>
         {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy)
-          .filter((item) => (team ? item.team === team : item.team)).filter((item) => filter === "Breached" ? item.dueBy < Date.now() : filter === "New" ? item.status === "New" : item)
+          .filter((item) => (team ? item.team === team : item.team))
+          .filter((item) =>
+            filter === "Breached"
+              ? item.dueBy < Date.now()
+              : filter === "New"
+              ? item.status === "New"
+              : item
+          )
           .map((item) => {
             return (
               <TableBody
