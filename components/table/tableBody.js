@@ -19,12 +19,58 @@ export default function TableBody(props) {
   ];
 
   return (
-    <tbody key={props.id} className="bg-white divide-y divide-gray-200">
+    <tbody key={props.id} className="bg-white">
       <tr
         className="cursor-pointer hover:bg-gray-200"
         value={props.id}
         onClick={props.onClick}
       >
+        <TableData styleClass="font-medium">{props.id}</TableData>
+        <TableData>
+          {moment(props.entryDate).format("DD/MM/YY, HH:mm")}
+        </TableData>
+        <TableData>{props.fullName}</TableData>
+        <TableData>{props.team}</TableData>
+        <TableData>{props.response} hr/s</TableData>
+        <TableDataStatus
+          styleClass={
+            props.status === "New"
+              ? "bg-green-100 text-green-800"
+              : props.status === "Allocated"
+              ? "bg-yellow-100 text-yellow-800"
+              : props.status === "Further Action"
+              ? "bg-red-100 text-red-800"
+              : "bg-blue-100 text-blue-800"
+          }
+        >
+          {props.status}
+        </TableDataStatus>
+        <TableData>
+          {props.completed
+            ? moment(props.completedDate).format("DD/MM/YY, HH:mm")
+            : moment(d).format("DD/MM/YY, HH:mm")}
+        </TableData>
+        <TableDataStatus
+          styleClass={`text-white ${
+            timerMin < 0
+              ? breached
+              : timerMin > 0 && timerMin < 480
+              ? red
+              : timerMin > 480 && timerMin < 1440
+              ? amber
+              : green
+          }`}
+        >
+          {props.report
+            ? timerMin < 0
+              ? "No"
+              : "Yes"
+            : timerMin < -1440
+            ? timerDay + " days"
+            : (timerMin > -1440 && timerMin < -60) || timerMin > 60
+            ? timerHour + " hours"
+            : timerMin + " mins"}
+        </TableDataStatus>
         <Link
           href={
             !props.report
@@ -34,46 +80,18 @@ export default function TableBody(props) {
         >
           <td className="p-2 whitespace-nowrap">
             <div className="pl-4 text-sm font-medium text-blue-600 hover:text-blue-300">
-              {props.id}
+              {!props.report ? "Update" : "View" }
             </div>
           </td>
         </Link>
-        <TableData>
-          {moment(props.entryDate).format("DD/MM/YY, HH:mm")}
-        </TableData>
-        <TableData>{props.fullName}</TableData>
-        <TableData>{props.team}</TableData>
-        <TableData>{props.response} hr/s</TableData>
-        <TableDataStatus styleClass={props.status === "New"
-                ? "bg-green-100 text-green-800"
-                : props.status === "Allocated"
-                ? "bg-yellow-100 text-yellow-800"
-                : props.status === "Further Action"
-                ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"} >
-                  {props.status}
-                </TableDataStatus>
-        <TableData>{props.completed ? moment(props.completedDate).format("DD/MM/YY, HH:mm") : moment(d).format("DD/MM/YY, HH:mm")}</TableData>
-          <TableDataStatus styleClass={`text-white ${timerMin < 0
-                ? breached
-                : timerMin > 0 && timerMin < 480
-                ? red
-                : timerMin > 480 && timerMin < 1440
-                ? amber
-                : green}`}>
-                 {props.report
-              ? timerMin < 0
-                ? "No"
-                : "Yes"
-              : timerMin < -1440 ? timerDay + " days"
-              : (timerMin > -1440 && timerMin < -60) || timerMin > 60
-              ? timerHour + " hours"
-              : timerMin + " mins"} 
-                </TableDataStatus>
       </tr>
       <tr>
-      <TableData colSpan="8" styleClass={props.id !== props.expand && "hidden"}>
-      Job Description: {props.job} 
-      </TableData>
+        <TableData
+          colSpan="8"
+          styleClass={props.id !== props.expand && "hidden"}
+        >
+          Job Description: {props.job}
+        </TableData>
       </tr>
     </tbody>
   );
@@ -93,5 +111,5 @@ TableBody.propTypes = {
   response: PropTypes.any.isRequired,
   status: PropTypes.string.isRequired,
   team: PropTypes.string.isRequired,
-  timeLeft: PropTypes.number
+  timeLeft: PropTypes.number,
 }

@@ -39,7 +39,10 @@ export default function AllocatedPage() {
       <DashStatsGrid>
         <DashStats total={data.Count} title="Total Requests" />
         <DashStats total={breach.length} title="Total Breached" />
-        <DashStats total={`${Math.round((breach.length/data.Count)*100)}%`} title="% Breached"/>
+        <DashStats
+          total={`${Math.round((breach.length / data.Count) * 100)}%`}
+          title="% Breached"
+        />
       </DashStatsGrid>
       <Dashboard total={data.Count} breach={breach.length}>
         {data.Items.sort((dateX, dateY) => dateX.dueBy - dateY.dueBy).map(

@@ -23,6 +23,7 @@ export default function Dashboard(props) {
           ))}
           <TableHead head={props.completed ? "Completed Date" : "Due By"}/>
           <TableHead head={props.completed ? "SLA" : "Time Left"}/>
+          <TableHead head=""/>
         </TableLayout.Head>
         <TableLayout.Body>
         {props.children}
@@ -35,5 +36,5 @@ export default function Dashboard(props) {
 
 Dashboard.propTypes = {
   children: PropTypes.array.isRequired,
-  completed: PropTypes.bool
+  completed: PropTypes.bool,
 }
